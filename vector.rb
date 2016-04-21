@@ -46,4 +46,7 @@ class Vector
     return Vector.new(to_unity(false).head, Point.new(0, 0))
   end
 
+  def to_s
+    return "[#{@orig.x},#{@origin.y}] ==> [#{@head.x},#{@head.y}] (lenght = #{length})"
+  end
 end

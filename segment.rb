@@ -37,4 +37,8 @@ class Segment
     @location.y
   end
 
+  def clone
+    return Segment.new(@window, Point.new(x, y), @color)
+  end
+
 end
