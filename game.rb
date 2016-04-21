@@ -1,6 +1,5 @@
 require 'gosu'
 require './segment'
-require './apple'
 require './snake'
 require './dot'
 require './vector'
@@ -46,6 +45,13 @@ class GameWindow < Gosu::Window
 		end
 		if button_down? Gosu::KbSpace
 			@snake.add_segments(10)
+		end
+
+		number_of_dots = @dots.length
+		@dots = @dots.select { |d| Gosu::distance(@snake.x, @snake.y, d.x, d.y) > 10 }
+
+		if @dots.length < number_of_dots
+			@snake.grow(5*(number_of_dots - @dots.length))
 		end
 
 		# Determine time from last update and take care of possible wrap around

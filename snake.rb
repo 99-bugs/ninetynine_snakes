@@ -43,8 +43,8 @@ class Snake
     return @segments.first
   end
 
-  def add_segments(number)
-    @segment_ticker = number
+  def grow(number_of_segments)
+    @segment_ticker = number_of_segments
   end
 
   def x
