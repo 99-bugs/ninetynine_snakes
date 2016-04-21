@@ -7,14 +7,24 @@ class Snake
     @segments = []
 
     @center = Point.new(@window.width/2, @window.height/2)
-    @head_segment = Segment.new(@window, @center)
+    @head_segment = Segment.new(@window, @center, Gosu::Color::YELLOW)
     @segments << @head_segment
+
+    @segments << Segment.new(@window, Point.new(5+@window.width/2, @window.height/2))
+    @segments << Segment.new(@window, Point.new(10+@window.width/2, @window.height/2))
+    @segments << Segment.new(@window, Point.new(10+@window.width/2, 5+@window.height/2))
+    @segments << Segment.new(@window, Point.new(10+@window.width/2, 10+@window.height/2))
+    @segments << Segment.new(@window, Point.new(15+@window.width/2, 10+@window.height/2))
+    @segments << Segment.new(@window, Point.new(20+@window.width/2, 15+@window.height/2))
+    @segments << Segment.new(@window, Point.new(25+@window.width/2, 20+@window.height/2))
+    @segments << Segment.new(@window, Point.new(30+@window.width/2, 20+@window.height/2))
+    @segments << Segment.new(@window, Point.new(35+@window.width/2, 20+@window.height/2))
+    @segments << Segment.new(@window, Point.new(45+@window.width/2, 20+@window.height/2))
+    @segments << Segment.new(@window, Point.new(50+@window.width/2, 20+@window.height/2))
 
     # @center = Point.new(@window.width/2, @window.height/2)
     # @dir_vector = (Vector.new(Point.new(0,0), @center)).to_unity
     # @speed = 2
-
-    # @target_location = Point.new(1, 1)
 
     # # Counts down to lengthen the snake each tick when it has eaten an apple
     # @ticker = 0
@@ -28,7 +38,7 @@ class Snake
 
   def draw
     # Draw the segments
-    @segments.each do |s|
+    @segments.reverse.each do |s|
       s.draw
     end
   end
