@@ -74,14 +74,16 @@ class GameWindow < Gosu::Window
 			@new_game.draw("Press Return to Try Again", 5, 250, 100)
 			@new_game.draw("Or Escape to Close", 5, 300, 100)
 		else
+		Gosu::translate(-@snake.x + (width / 2), -@snake.y + (height / 2)) do
 			@snake.draw
-	    @dots.each do |d|
-	      d.draw
-	    end
+			@dots.each do |d|
+				d.draw
+			end
+		end
 
 	    if (@draw_direction_vector)
 	      large_dir_vec = @dir_vector.clone.enlarge(10).to_discrete
-	      draw_line(large_dir_vec.origin.x, large_dir_vec.origin.y, Gosu::Color::GREEN, 
+	      draw_line(large_dir_vec.origin.x, large_dir_vec.origin.y, Gosu::Color::GREEN,
 	        large_dir_vec.head.x, large_dir_vec.head.y, Gosu::Color::GREEN)
 	    end
 

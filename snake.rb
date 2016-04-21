@@ -47,4 +47,12 @@ class Snake
     @segment_ticker = number
   end
 
+  def x
+      head.x
+  end
+
+  def y
+      head.y
+  end
+
 end
