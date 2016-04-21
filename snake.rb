@@ -55,4 +55,8 @@ class Snake
       head.y
   end
 
+  def location
+      head.location
+  end
+
 end

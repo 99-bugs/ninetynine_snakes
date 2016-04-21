@@ -4,6 +4,7 @@ require './apple'
 require './snake'
 require './dot'
 require './vector'
+require './camera'
 
 class GameWindow < Gosu::Window
 	def initialize
@@ -12,6 +13,8 @@ class GameWindow < Gosu::Window
 		@snake = Snake.new(self, 10)
 		@score = 0
 		@text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
+		@camera = Camera.new(width, height)
+		@camera.tick(@snake.location)
 
 		@dots = []
 		@dots << Dot.new(self, Point.new(100, 23))
@@ -50,12 +53,13 @@ class GameWindow < Gosu::Window
 			interval = Gosu::milliseconds() - @last_update_ms
 		else
 			@last_update_ms = 0
-			interval = 250
+			interval = 100
 		end
 
-		if (interval >= 250)
+		if (interval >= 100)
 			# Move the snake towards the mouse pointer
 			@snake.move(@dir)
+			@camera.tick(@snake.location)
 			@last_update_ms = Gosu::milliseconds()
 		end
 
@@ -74,11 +78,11 @@ class GameWindow < Gosu::Window
 			@new_game.draw("Press Return to Try Again", 5, 250, 100)
 			@new_game.draw("Or Escape to Close", 5, 300, 100)
 		else
-		Gosu::translate(-@snake.x + (width / 2), -@snake.y + (height / 2)) do
-			@snake.draw
-			@dots.each do |d|
-				d.draw
-			end
+			Gosu::translate(@camera.x, @camera.y) do
+				@snake.draw
+				@dots.each do |d|
+					d.draw
+				end
 		end
 
 	    if (@draw_direction_vector)
