@@ -12,6 +12,8 @@ class GameWindow < Gosu::Window
 		@snake = Snake.new(self, 10)
 		@score = 0
 		@text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
+
+		# Create camera
 		@camera = Camera.new(width, height)
 		@camera.tick(@snake.location)
 
@@ -21,32 +23,40 @@ class GameWindow < Gosu::Window
 		@dots << Dot.new(self, Point.new(235, 323))
 		@dots << Dot.new(self, Point.new(100, 300))
 
+		# Direction vector is based on center of window (because so are mouse coordinates)
     @center = Point.new(width/2, height/2)
     @dir_vector = (Vector.new(Point.new(0,0), @center)).to_unity
 
-    @draw_direction_vector = true
-
 		@last_update_ms = 0
-		@dir = Vector.new(Point.new(1, 0), Point.new(0, 0))
+		@use_mouse = true
 	end
 
-	def update
-		if button_down? Gosu::KbLeft
-			@dir = Vector.new(Point.new(-1, 0), Point.new(0, 0))
-		end
-		if button_down? Gosu::KbRight
-			@dir = Vector.new(Point.new(1, 0), Point.new(0, 0))
-		end
-		if button_down? Gosu::KbUp
-			@dir = Vector.new(Point.new(0, -1), Point.new(0, 0))
-		end
-		if button_down? Gosu::KbDown
-			@dir = Vector.new(Point.new(0, 1), Point.new(0, 0))
-		end
-		if button_down? Gosu::KbSpace
-			@snake.add_segments(10)
-		end
+  def update_target_location
+  	if (@use_mouse)
+	    # First we need to determine the direction vector from the middle of the window
+	    # toward the current location of the mouse pointer
+	    mouse = Point.new(mouse_x, mouse_y)
+	    @dir_vector = (Vector.new(mouse, @center)).to_direction
+	  else
+			if button_down? Gosu::KbLeft
+				@dir = Vector.new(Point.new(-1, 0), Point.new(0, 0))
+			end
+			if button_down? Gosu::KbRight
+				@dir = Vector.new(Point.new(1, 0), Point.new(0, 0))
+			end
+			if button_down? Gosu::KbUp
+				@dir = Vector.new(Point.new(0, -1), Point.new(0, 0))
+			end
+			if button_down? Gosu::KbDown
+				@dir = Vector.new(Point.new(0, 1), Point.new(0, 0))
+			end
+	  end
+  end
 
+	def update
+		update_target_location
+
+		# Check for eaten dots
 		number_of_dots = @dots.length
 		@dots = @dots.select { |d| Gosu::distance(@snake.x, @snake.y, d.x, d.y) > 10 }
 
@@ -64,7 +74,7 @@ class GameWindow < Gosu::Window
 
 		if (interval >= 100)
 			# Move the snake towards the mouse pointer
-			@snake.move(@dir)
+			@snake.move(@dir_vector)
 			@camera.tick(@snake.location)
 			@last_update_ms = Gosu::milliseconds()
 		end
@@ -90,13 +100,6 @@ class GameWindow < Gosu::Window
 					d.draw
 				end
 		end
-
-	    if (@draw_direction_vector)
-	      large_dir_vec = @dir_vector.clone.enlarge(10).to_discrete
-	      draw_line(large_dir_vec.origin.x, large_dir_vec.origin.y, Gosu::Color::GREEN,
-	        large_dir_vec.head.x, large_dir_vec.head.y, Gosu::Color::GREEN)
-	    end
-
 			@text_object.draw("Score: #{@score}",5,5,0)
 			@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
 		end

@@ -47,6 +47,6 @@ class Vector
   end
 
   def to_s
-    return "[#{@orig.x},#{@origin.y}] ==> [#{@head.x},#{@head.y}] (lenght = #{length})"
+    return "[#{@origin.x},#{@origin.y}] ==> [#{@head.x},#{@head.y}] (lenght = #{length})"
   end
 end
