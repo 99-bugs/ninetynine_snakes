@@ -1,11 +1,12 @@
 class Snake
 
-  def initialize(window, start_length=5)
+  def initialize(window, start_length=5, size=10)
     @segments = []
     @window = window
+    @size = size
 
     for i in 0..start_length
-      @segments << Segment.new(@window, Point.new(100, 100+i))
+      @segments << Segment.new(@window, Point.new(100, 100+i*@size))
     end
 
     # Counts down to lengthen the snake
@@ -15,7 +16,7 @@ class Snake
   def move(direction_vector)
     # Create new segment at the front
     new_segment = @segments.first.clone
-    new_segment.location.translate_by_direction_vector(direction_vector)
+    new_segment.location.translate_by_direction_vector(direction_vector.clone.enlarge(@size))
     @segments.unshift(new_segment)
 
     # Remove the last at the back

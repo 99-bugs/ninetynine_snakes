@@ -9,7 +9,7 @@ class GameWindow < Gosu::Window
 	def initialize
 		super 640, 480, false
 		self.caption = "Snake"
-		@snake = Snake.new(self, 20)
+		@snake = Snake.new(self, 10)
 		@score = 0
 		@text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
 
@@ -42,7 +42,7 @@ class GameWindow < Gosu::Window
 			@dir = Vector.new(Point.new(0, 1), Point.new(0, 0))
 		end
 		if button_down? Gosu::KbSpace
-			@snake.add_segments(20)
+			@snake.add_segments(10)
 		end
 
 		# Determine time from last update and take care of possible wrap around
@@ -50,10 +50,10 @@ class GameWindow < Gosu::Window
 			interval = Gosu::milliseconds() - @last_update_ms
 		else
 			@last_update_ms = 0
-			interval = 25
+			interval = 250
 		end
 
-		if (interval >= 25)
+		if (interval >= 250)
 			# Move the snake towards the mouse pointer
 			@snake.move(@dir)
 			@last_update_ms = Gosu::milliseconds()
