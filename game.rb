@@ -4,6 +4,7 @@ require './snake'
 require './dot'
 require './vector'
 require './camera'
+require './cursor'
 require './universe'
 
 class GameWindow < Gosu::Window
@@ -18,6 +19,8 @@ class GameWindow < Gosu::Window
 		snake = Snake.new(self, 10)
 		@universe.add_snake(snake)
 		@universe.generate_random_dots(100)
+
+		@cursor = Cursor.new(self)
 
 		# Create camera
 		@camera = Camera.new(width, height)
@@ -57,6 +60,7 @@ class GameWindow < Gosu::Window
 		update_target_location
 
 		@universe.check_for_dot_collisions
+		@cursor.update_position
 
 		# Determine time from last update and take care of possible wrap around
 		if (Gosu::milliseconds() > @last_update_ms)
@@ -91,8 +95,10 @@ class GameWindow < Gosu::Window
 			Gosu::translate(@camera.x, @camera.y) do
 				@universe.draw
 		end
-			@text_object.draw("Score: #{@score}",5,5,0)
-			@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
+
+		@cursor.draw
+		@text_object.draw("Score: #{@score}",5,5,0)
+		@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
 		end
 	end
 end
