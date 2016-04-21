@@ -1,9 +1,9 @@
 require './point'
 
-class Segment
+class Dot
   attr_accessor :location
 
-  def initialize(window, location, color=Gosu::Color::GREEN)
+  def initialize(window, location, color=Gosu::Color::RED)
     @window = window
     @location = location
     @color = color
