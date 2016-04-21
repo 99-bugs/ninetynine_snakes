@@ -4,24 +4,24 @@ require './snake'
 require './dot'
 require './vector'
 require './camera'
+require './universe'
 
 class GameWindow < Gosu::Window
 	def initialize
 		super 640, 480, false
 		self.caption = "Snake"
-		@snake = Snake.new(self, 10)
 		@score = 0
 		@text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
 
+		# Create the game universe
+		@universe = Universe.new(self)
+		snake = Snake.new(self, 10)
+		@universe.add_snake(snake)
+		@universe.generate_random_dots(100)
+
 		# Create camera
 		@camera = Camera.new(width, height)
-		@camera.tick(@snake.location)
-
-		@dots = []
-		@dots << Dot.new(self, Point.new(100, 23))
-		@dots << Dot.new(self, Point.new(20, 20))
-		@dots << Dot.new(self, Point.new(235, 323))
-		@dots << Dot.new(self, Point.new(100, 300))
+		@camera.tick(snake.location)
 
 		# Direction vector is based on center of window (because so are mouse coordinates)
     @center = Point.new(width/2, height/2)
@@ -56,13 +56,7 @@ class GameWindow < Gosu::Window
 	def update
 		update_target_location
 
-		# Check for eaten dots
-		number_of_dots = @dots.length
-		@dots = @dots.select { |d| Gosu::distance(@snake.x, @snake.y, d.x, d.y) > 10 }
-
-		if @dots.length < number_of_dots
-			@snake.grow(5*(number_of_dots - @dots.length))
-		end
+		@universe.check_for_dot_collisions
 
 		# Determine time from last update and take care of possible wrap around
 		if (Gosu::milliseconds() > @last_update_ms)
@@ -74,8 +68,8 @@ class GameWindow < Gosu::Window
 
 		if (interval >= 100)
 			# Move the snake towards the mouse pointer
-			@snake.move(@dir_vector)
-			@camera.tick(@snake.location)
+			@universe.snakes.first.move(@dir_vector)
+			@camera.tick(@universe.snakes.first.location)
 			@last_update_ms = Gosu::milliseconds()
 		end
 
@@ -95,10 +89,7 @@ class GameWindow < Gosu::Window
 			@new_game.draw("Or Escape to Close", 5, 300, 100)
 		else
 			Gosu::translate(@camera.x, @camera.y) do
-				@snake.draw
-				@dots.each do |d|
-					d.draw
-				end
+				@universe.draw
 		end
 			@text_object.draw("Score: #{@score}",5,5,0)
 			@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
