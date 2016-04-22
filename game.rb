@@ -27,10 +27,9 @@ class GameWindow < Gosu::Window
 		@camera.tick(snake.location)
 
 		# Direction vector is based on center of window (because so are mouse coordinates)
-    @center = Point.new(width/2, height/2)
-    @dir_vector = (Vector.new(Point.new(0,0), @center)).to_unity
+    	@center = Point.new(width/2, height/2)
+    	@dir_vector = (Vector.new(Point.new(0,0), @center)).to_unity
 
-		@last_update_ms = 0
 		@use_mouse = true
 	end
 
@@ -59,23 +58,14 @@ class GameWindow < Gosu::Window
 	def update
 		update_target_location
 
+		snake = @universe.snakes.first
+
 		@universe.check_for_dot_collisions
 		@cursor.update_position
 
-		# Determine time from last update and take care of possible wrap around
-		if (Gosu::milliseconds() > @last_update_ms)
-			interval = Gosu::milliseconds() - @last_update_ms
-		else
-			@last_update_ms = 0
-			interval = 100
-		end
-
-		if (interval >= 100)
-			# Move the snake towards the mouse pointer
-			@universe.snakes.first.move(@dir_vector)
-			@camera.tick(@universe.snakes.first.location)
-			@last_update_ms = Gosu::milliseconds()
-		end
+		# Move the snake towards the mouse pointer
+		snake.move(@dir_vector)
+		@camera.tick(snake.location)
 
 		if button_down? Gosu::KbEscape
 			self.close
@@ -94,7 +84,9 @@ class GameWindow < Gosu::Window
 		else
 			Gosu::translate(@camera.x, @camera.y) do
 				@universe.draw
-		end
+			end
+
+		@text_object.draw("Debug: " + ((@dir_vector.angle * 180) / Math::PI).to_s, 5, 300, 100)
 
 		@cursor.draw
 		@text_object.draw("Score: #{@score}",5,5,0)

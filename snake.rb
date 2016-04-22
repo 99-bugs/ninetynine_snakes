@@ -1,30 +1,48 @@
 class Snake
+    MAX_ANGLE = 10.0 / 60
 
   def initialize(window, start_length=5, size=10)
     @segments = []
     @window = window
     @size = size
+    @speed = 5
 
-    for i in 0..start_length
+    start_length.times do |i|
       @segments << Segment.new(@window, Point.new(100, 100+i*@size))
     end
+    @prev_angle = 0
 
-    # Counts down to lengthen the snake
-    @segment_ticker = 0
   end
 
   def move(direction_vector)
-    # Create new segment at the front
-    new_segment = @segments.first.clone
-    new_segment.location.translate_by_direction_vector(direction_vector.clone.enlarge(@size))
-    @segments.unshift(new_segment)
 
-    # Remove the last at the back
-    if @segment_ticker == 0
-      @segments.pop(1)
-    else
-      @segment_ticker -= 1
-    end
+      delta_angle = direction_vector.angle - @prev_angle
+      if (delta_angle.abs < MAX_ANGLE)
+          angle = direction_vector.angle
+      else
+          angle = @prev_angle + (delta_angle / delta_angle.abs) * MAX_ANGLE
+      end
+      # angle = [delta_angle, (delta_angle / delta_angle.abs) * 120].min
+      move_head angle
+      move_body
+      @prev_angle = angle
+  end
+
+  def move_head(angle)
+      dx = Math.cos(angle) * @size / @speed
+      dy = Math.sin(angle) * @size / @speed
+      @segments.first.location.x += dx
+      @segments.first.location.y += dy
+  end
+
+  def move_body
+      head = @segments.first
+      (1..@segments.size-1).each do |i|
+          destination = Vector.new(@segments[i].location, head).to_unity.enlarge(@size)
+          @segments[i].location = destination.head
+          head = @segments[i]
+      end
+      #exit
   end
 
   # Returns length of snake

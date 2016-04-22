@@ -49,4 +49,10 @@ class Vector
   def to_s
     return "[#{@origin.x},#{@origin.y}] ==> [#{@head.x},#{@head.y}] (lenght = #{length})"
   end
+
+  def angle
+      dx = head.x - origin.x
+      dy = head.y - origin.y
+      Math.atan2(dy,dx)
+    end
 end
