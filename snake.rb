@@ -57,7 +57,7 @@ class Snake
   end
 
   def grow(number_of_segments)
-    @segment_ticker = number_of_segments
+    @segments << Segment.new(@window, Point.new(0,0))
   end
 
   def x
