@@ -86,11 +86,9 @@ class GameWindow < Gosu::Window
 				@universe.draw
 			end
 
-		@text_object.draw("Debug: " + ((@dir_vector.angle * 180) / Math::PI).to_s, 5, 300, 100)
-
-		@cursor.draw
-		@text_object.draw("Score: #{@score}",5,5,0)
-		@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
+			@cursor.draw
+			@text_object.draw("Score: #{@score}",5,5,0)
+			@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
 		end
 	end
 end
