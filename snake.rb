@@ -1,11 +1,10 @@
 class Snake
-    MAX_ANGLE = 10.0 / 60
-
   def initialize(window, start_length=5, size=10)
     @segments = []
     @window = window
     @size = size
     @speed = 5
+    @turn_radius = 30
 
     start_length.times do |i|
       @segments << Segment.new(@window, Point.new(100, 100+i*@size))
@@ -18,7 +17,7 @@ class Snake
       delta_angle = direction_vector.angle - @prev_angle
       delta_angle += Math::PI * 2 while delta_angle < Math::PI
       delta_angle -= Math::PI * 2 while delta_angle > Math::PI
-      angle = @prev_angle + delta_angle / 30
+      angle = @prev_angle + delta_angle / @turn_radius
 
       move_head angle
       move_body
@@ -39,7 +38,6 @@ class Snake
           @segments[i].location = destination.head
           head = @segments[i]
       end
-      #exit
   end
 
   # Returns length of snake
