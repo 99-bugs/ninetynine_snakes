@@ -15,14 +15,11 @@ class Snake
   end
 
   def move(direction_vector)
-
       delta_angle = direction_vector.angle - @prev_angle
-      if (delta_angle.abs < MAX_ANGLE)
-          angle = direction_vector.angle
-      else
-          angle = @prev_angle + (delta_angle / delta_angle.abs) * MAX_ANGLE
-      end
-      # angle = [delta_angle, (delta_angle / delta_angle.abs) * 120].min
+      delta_angle += Math::PI * 2 while delta_angle < Math::PI
+      delta_angle -= Math::PI * 2 while delta_angle > Math::PI
+      angle = @prev_angle + delta_angle / 30
+
       move_head angle
       move_body
       @prev_angle = angle
