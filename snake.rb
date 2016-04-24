@@ -1,4 +1,7 @@
 class Snake
+
+    attr_accessor :size
+
   def initialize(window, start_length=5, size=10)
     @segments = []
     @window = window

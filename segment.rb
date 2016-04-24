@@ -26,4 +26,12 @@ class Segment < GameObject
     return Segment.new(@window, Point.new(x, y), @color)
   end
 
+  def width
+      @width
+  end
+
+  def height
+      @height
+  end
+
 end
