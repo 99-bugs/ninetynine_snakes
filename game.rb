@@ -59,8 +59,7 @@ class GameWindow < Gosu::Window
 		update_target_location
 
 		snake = @universe.snakes.first
-
-		@universe.check_for_dot_collisions
+		@universe.update
 		@cursor.update_position
 
 		# Move the snake towards the mouse pointer

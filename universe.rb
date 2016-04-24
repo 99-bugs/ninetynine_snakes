@@ -23,20 +23,22 @@ class Universe
 
     snake = @snakes.first
 
-    gravity_force = 10
-    gravity_distance = 2.5 * snake.head.width / 2
+    gravity = {
+        force: 10,
+        distance: 2.5 * snake.head.width / 2  #note: head.width => sprite width !
+    }
 
-    @near_dots = @dots.select { |d| Gosu::distance(snake.x, snake.y, d.x, d.y) < gravity_distance }
+    @near_dots = @dots.select { |d| Gosu::distance(snake.x, snake.y, d.x, d.y) < gravity[:distance] }
     @near_dots.each do |dot|
         distance = Gosu::distance(snake.x, snake.y, dot.x, dot.y)
-        distance_factor = 1 - (distance / gravity_distance)
-        if distance < gravity_distance
+        distance_factor = 1 - (distance / gravity[:distance])
+        if distance < gravity[:distance]
             dx = snake.x - dot.x
             dy = snake.y - dot.y
-            dx = dx / gravity_force * distance_factor
-            dy = dy / gravity_force * distance_factor
-            dot.location.x += dx
-            dot.location.y += dy
+            dx = dx / gravity[:force] * distance_factor
+            dy = dy / gravity[:force] * distance_factor
+            dot.center_location.x += dx
+            dot.center_location.y += dy
         end
     end
 
@@ -46,6 +48,13 @@ class Universe
     if @dots.length < number_of_dots
       @snakes.first.grow(5*(number_of_dots - @dots.length))
     end
+  end
+
+  def update
+      @dots.each do |dot|
+          dot.update
+      end
+      check_for_dot_collisions
   end
 
   def draw
