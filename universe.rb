@@ -6,7 +6,7 @@ class Universe
     @window = window
     @dots = []
     @snakes = []
-    @background = Gosu::Image.new(window,'./textures/background.png', true)
+    @background = Gosu::Image.new(window,'./textures/background3.jpg', true)
   end
 
   def generate_random_dots(count)
@@ -65,7 +65,7 @@ class Universe
       horizonal_tiles.times { |row|
           vertical_tiles.times { |column|
               @background.draw(
-                (((snake.location.x / @background.height).floor + column) * @background.height) - ((@background.height * (horizonal_tiles - 2)) / 2),
+                (((snake.location.x / @background.height).floor + column) * @background.height) - ((@background.height * (vertical_tiles - 2)) / 2),
                 (((snake.location.y / @background.width).floor + row) * @background.width) - ((@background.width * (horizonal_tiles - 2)) / 2),
                 1
               )
