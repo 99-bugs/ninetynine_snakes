@@ -67,7 +67,7 @@ class Universe
               @background.draw(
                 (((snake.location.x / @background.height).floor + column) * @background.height) - ((@background.height * (vertical_tiles - 1)) / 2),
                 (((snake.location.y / @background.width).floor + row) * @background.width) - ((@background.width * (horizonal_tiles - 1)) / 2),
-                1
+                -100
               )
           }
       }
