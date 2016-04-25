@@ -14,6 +14,8 @@ class Snake
     end
     @prev_angle = 0
 
+    # Assets
+    @window.soundmanager.load_file('eat_dot.wav', 'eat_dot')
   end
 
   def move(direction_vector)
@@ -61,6 +63,7 @@ class Snake
 
   def grow(number_of_segments)
     @segments << Segment.new(@window, Point.new(0,0))
+    @window.soundmanager.play('eat_dot')
   end
 
   def x
