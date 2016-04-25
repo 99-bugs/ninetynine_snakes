@@ -38,4 +38,16 @@ class Menu
       e.draw
     end
   end
+
+  def clicked(location)
+    mouse_x = location.x
+    mouse_y = location.y
+    @entries.each do |e|
+      boundaries = e.boundaries
+      if (mouse_x > boundaries[:top_left].x && mouse_x < boundaries[:bottom_right].x &&
+        mouse_y > boundaries[:top_left].y && mouse_y < boundaries[:bottom_right].y)
+        e.click
+      end
+    end
+  end
 end

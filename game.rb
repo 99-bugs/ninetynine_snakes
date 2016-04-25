@@ -47,7 +47,7 @@ class GameWindow < Gosu::Window
 
 	def build_menu
 		@menu = Menu.new(self)
-		@menu.add('Start Game', lambda { puts "Starting new Game"})
+		@menu.add('Start Game', lambda { @show_menu = false })
 		@menu.add('Options', lambda { puts "Showing Options"})
 		@menu.add('Credits', lambda { puts "Showing Credits"})
 		@menu.add('Exit Game', lambda { puts "Exiting Game"})
@@ -89,6 +89,10 @@ class GameWindow < Gosu::Window
 
 			if button_down? Gosu::KbEscape
 				self.close
+			end
+		else
+			if button_down? Gosu::MsLeft
+				@menu.clicked(Point.new(mouse_x, mouse_y))
 			end
 		end
 	end
