@@ -60,13 +60,13 @@ class Universe
 
   def draw
       snake = @snakes.first
-      vertical_tiles = (@window.height.to_f / @background.height.to_f).ceil + 2
-      horizonal_tiles = (@window.width.to_f / @background.width.to_f).ceil + 2
+      vertical_tiles = (@window.height.to_f / @background.height.to_f).ceil + 1
+      horizonal_tiles = (@window.width.to_f / @background.width.to_f).ceil + 1
       horizonal_tiles.times { |row|
           vertical_tiles.times { |column|
               @background.draw(
-                (((snake.location.x / @background.height).floor + column) * @background.height) - ((@background.height * (vertical_tiles - 2)) / 2),
-                (((snake.location.y / @background.width).floor + row) * @background.width) - ((@background.width * (horizonal_tiles - 2)) / 2),
+                (((snake.location.x / @background.height).floor + column) * @background.height) - ((@background.height * (vertical_tiles - 1)) / 2),
+                (((snake.location.y / @background.width).floor + row) * @background.width) - ((@background.width * (horizonal_tiles - 1)) / 2),
                 1
               )
           }
