@@ -1,5 +1,5 @@
 require './game_object'
-require './point'
+require './lib/2d/point'
 
 class Cursor < GameObject
   SPRITE_SIZE_FACTOR = 0.2
