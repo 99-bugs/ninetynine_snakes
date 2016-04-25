@@ -8,9 +8,10 @@ require './cursor'
 require './universe'
 require './lib/assets/sound_manager'
 require './lib/assets/texture_manager'
+require './lib/menu/menu.rb'
 
 class GameWindow < Gosu::Window
-	attr_reader :soundmanager, :texturemanager
+	attr_reader :soundmanager, :texturemanager, :center
 
 	def initialize
 		super 640, 480, false
@@ -37,7 +38,19 @@ class GameWindow < Gosu::Window
     	@center = Point.new(width/2, height/2)
     	@dir_vector = (Vector.new(Point.new(0,0), @center)).to_unity
 
+    # Create a menu
+    build_menu
+
 		@use_mouse = true
+		@show_menu = true
+	end
+
+	def build_menu
+		@menu = Menu.new(self)
+		@menu.add('Start Game', lambda { puts "Starting new Game"})
+		@menu.add('Options', lambda { puts "Showing Options"})
+		@menu.add('Credits', lambda { puts "Showing Credits"})
+		@menu.add('Exit Game', lambda { puts "Exiting Game"})
 	end
 
   def update_target_location
@@ -63,18 +76,20 @@ class GameWindow < Gosu::Window
   end
 
 	def update
-		update_target_location
-
-		snake = @universe.snakes.first
-		@universe.update
 		@cursor.update_position
+		if (!@show_menu)
+			update_target_location
 
-		# Move the snake towards the mouse pointer
-		snake.move(@dir_vector)
-		@camera.tick(snake.location)
+			snake = @universe.snakes.first
+			@universe.update
 
-		if button_down? Gosu::KbEscape
-			self.close
+			# Move the snake towards the mouse pointer
+			snake.move(@dir_vector)
+			@camera.tick(snake.location)
+
+			if button_down? Gosu::KbEscape
+				self.close
+			end
 		end
 	end
 
@@ -83,19 +98,25 @@ class GameWindow < Gosu::Window
 		# not even advance animations.
 		# If you write draw in a functional, read-only style then you are safe.
 
-		if @new_game
-			@new_game.draw("Your Score was #{@score}", 5, 200, 100)
-			@new_game.draw("Press Return to Try Again", 5, 250, 100)
-			@new_game.draw("Or Escape to Close", 5, 300, 100)
+		if (@show_menu)
+			@menu.draw
 		else
-			Gosu::translate(@camera.x, @camera.y) do
-				@universe.draw
-			end
+			if @new_game
+				@new_game.draw("Your Score was #{@score}", 5, 200, 100)
+				@new_game.draw("Press Return to Try Again", 5, 250, 100)
+				@new_game.draw("Or Escape to Close", 5, 300, 100)
+			else
+				Gosu::translate(@camera.x, @camera.y) do
+					@universe.draw
+				end
 
-			@cursor.draw
-			@text_object.draw("Score: #{@score}",5,5,0)
-			@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
+				@text_object.draw("Score: #{@score}",5,5,0)
+				@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
+			end
 		end
+		
+		# Always draw cursor
+		@cursor.draw
 	end
 end
 
