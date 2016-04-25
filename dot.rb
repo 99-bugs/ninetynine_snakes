@@ -11,10 +11,11 @@ class Dot < GameObject
   attr_accessor :center_location
 
   def initialize(window, location, color=Gosu::Color::RED)
-    super(window, location, color)
-    @size = 1.0;
-    @width = @height = SPRITE_SIZE * SPRITE_SIZE_FACTOR
-    @sprites = Gosu::Image::load_tiles('./textures/snake.png', SPRITE_SIZE, SPRITE_SIZE)
+    width = height = SPRITE_SIZE * SPRITE_SIZE_FACTOR
+    super(window, location, width, height, 1.0, color)
+
+    @window.texturemanager.load_texture('snake.png', 'dot', SPRITE_SIZE)
+
     r = Random.new
     @motion = {
         speed: r.rand(-MOTION_MAX_SPEED..MOTION_MAX_SPEED),
@@ -31,7 +32,7 @@ class Dot < GameObject
   end
 
   def draw
-    @sprites[0].draw(
+    @window.texturemanager.get_sprites('dot')[0].draw(
         x - (@width / 2),
         y - (@width / 2),
         1,

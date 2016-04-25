@@ -6,10 +6,10 @@ class Cursor < GameObject
   SPRITE_SIZE = 211
 
   def initialize(window)
-    super(window, Point.new(window.mouse_x, window.mouse_y), nil)
-    @size = 1.0;
-    @width = @height = SPRITE_SIZE * SPRITE_SIZE_FACTOR
-    @sprites = Gosu::Image::load_tiles('./textures/target.png', SPRITE_SIZE, SPRITE_SIZE)
+    width = height = SPRITE_SIZE * SPRITE_SIZE_FACTOR
+    super(window, Point.new(window.mouse_x, window.mouse_y), width, height, 1.0, nil)
+
+    @window.texturemanager.load_texture('target.png', 'cursor', SPRITE_SIZE)
   end
 
   def update_position
@@ -17,7 +17,7 @@ class Cursor < GameObject
   end
 
   def draw
-    @sprites[0].draw(
+    @window.texturemanager.get_sprites('cursor')[0].draw(
         x - (@width / 2),
         y - (@width / 2),
         1,

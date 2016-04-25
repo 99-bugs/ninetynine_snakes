@@ -6,14 +6,14 @@ class Segment < GameObject
   SPRITE_SIZE = 96
 
   def initialize(window, location, color=Gosu::Color::GREEN)
-    super(window, location, color)
-    @size = 1.0;
-    @width = @height = SPRITE_SIZE * SPRITE_SIZE_FACTOR
-    @sprites = Gosu::Image::load_tiles('./textures/snake.png', SPRITE_SIZE, SPRITE_SIZE)
+    width = height = SPRITE_SIZE * SPRITE_SIZE_FACTOR
+    super(window, location, width, height, 1.0, color)
+
+    @window.texturemanager.load_texture('snake.png', 'segment', SPRITE_SIZE)
   end
 
   def draw
-    @sprites[0].draw(
+    @window.texturemanager.get_sprites('segment')[0].draw(
         x - (@width / 2),
         y - (@width / 2),
         1,

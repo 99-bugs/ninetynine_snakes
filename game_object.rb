@@ -1,10 +1,13 @@
 class GameObject
-  attr_accessor :location
+  attr_accessor :location, :width, :height, :size
 
-  def initialize(window, location, color=Gosu::Color::RED)
+  def initialize(window, location, width, height, size=1.0, color=Gosu::Color::RED)
     @window = window
     @location = location
     @color = color
+    @width = width
+    @height = height
+    @size = size
   end
 
   def draw

@@ -6,10 +6,11 @@ require './vector'
 require './camera'
 require './cursor'
 require './universe'
-require './sound_manager'
+require './lib/assets/sound_manager'
+require './lib/assets/texture_manager'
 
 class GameWindow < Gosu::Window
-	attr_reader :soundmanager
+	attr_reader :soundmanager, :texturemanager
 
 	def initialize
 		super 640, 480, false
@@ -18,6 +19,7 @@ class GameWindow < Gosu::Window
 		@text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
 
 		@soundmanager = SoundManager.new
+		@texturemanager = TextureManager.new(self)
 
 		# Create the game universe
 		@universe = Universe.new(self)
