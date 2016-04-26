@@ -16,7 +16,7 @@ class GameWindow < Gosu::Window
 
 	def initialize
 		super 640, 480, false
-		self.caption = "Snake"
+		self.caption = "99-Snakes"
 		@score = 0
 		@text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
 
