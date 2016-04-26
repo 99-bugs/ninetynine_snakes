@@ -1,3 +1,8 @@
+require './lib/game_objects/dot'
+require './lib/game_objects/segment'
+require './lib/game_objects/cursor'
+require './snake'
+
 class Universe
 
   attr_accessor :dots, :snakes

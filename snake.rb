@@ -1,3 +1,5 @@
+require './lib/2d/vector'
+
 class Snake
 
     attr_accessor :size

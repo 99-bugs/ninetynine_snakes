@@ -1,5 +1,4 @@
-require './game_object'
-require './lib/2d/point'
+require File.expand_path("../game_object", __FILE__)
 
 class Cursor < GameObject
   SPRITE_SIZE_FACTOR = 0.2
