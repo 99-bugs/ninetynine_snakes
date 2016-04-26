@@ -1,17 +1,30 @@
-ruby-snake
-==========
+# 99-snakes
 
 A snake game made with Ruby and the Gosu 2D game development library.
 
-Features:
-* Fun snake game, only requires the Gosu library
+## Running the Game
 
-Known Bugs:
-* Apple can spawn inside the snake's body.
+Install bundler gem
 
-Installation:
-* Clone repo into directory of your choice.
-* gem install gosu
-* ruby snake.rb
+```shell
+sudo gem install bundler
+```
 
-Have fun!
+Install some dependencies
+
+```shell
+sudo apt-get install ruby-dev
+sudo apt-get install build-essential libsdl2-dev libsdl2-ttf-dev libpango1.0-dev libgl1-mesa-dev libfreeimage-dev libopenal-dev libsndfile-dev
+```
+
+Do a bundle install
+
+```shell
+bundle install
+```
+
+Run the game
+
+```shell
+ruby game.rb
+```
