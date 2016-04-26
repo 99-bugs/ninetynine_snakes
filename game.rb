@@ -8,7 +8,8 @@ require './cursor'
 require './universe'
 require './lib/assets/sound_manager'
 require './lib/assets/texture_manager'
-require './lib/menu/menu.rb'
+require './lib/menu/menu'
+require './lib/configuration'
 
 class GameWindow < Gosu::Window
 	attr_reader :soundmanager, :texturemanager, :center
@@ -41,43 +42,45 @@ class GameWindow < Gosu::Window
     # Create a menu
     build_menu
 
-		@use_mouse = true
-		@show_menu = true
+    # Game state
+    @game_state = :main_menu
+
+    @configuration = Configuration.new
 	end
 
 	def build_menu
 		@menu = Menu.new(self)
-		@menu.add('Start Game', lambda { @show_menu = false })
+		@menu.add('Start Game', lambda { @game_state = :playing })
 		@menu.add('Options', lambda { puts "Showing Options"})
 		@menu.add('Credits', lambda { puts "Showing Credits"})
 		@menu.add('Exit Game', lambda { self.close })
 	end
 
   def update_target_location
-  	if (@use_mouse)
+  	if (@configuration.use_mouse)
 	    # First we need to determine the direction vector from the middle of the window
 	    # toward the current location of the mouse pointer
 	    mouse = Point.new(mouse_x, mouse_y)
 	    @dir_vector = (Vector.new(mouse, @center)).to_direction
 	  else
 			if button_down? Gosu::KbLeft
-				@dir = Vector.new(Point.new(-1, 0), Point.new(0, 0))
+				@dir_vector = Vector.new(Point.new(-1, 0), Point.new(0, 0))
 			end
 			if button_down? Gosu::KbRight
-				@dir = Vector.new(Point.new(1, 0), Point.new(0, 0))
+				@dir_vector = Vector.new(Point.new(1, 0), Point.new(0, 0))
 			end
 			if button_down? Gosu::KbUp
-				@dir = Vector.new(Point.new(0, -1), Point.new(0, 0))
+				@dir_vector = Vector.new(Point.new(0, -1), Point.new(0, 0))
 			end
 			if button_down? Gosu::KbDown
-				@dir = Vector.new(Point.new(0, 1), Point.new(0, 0))
+				@dir_vector = Vector.new(Point.new(0, 1), Point.new(0, 0))
 			end
 	  end
   end
 
 	def update
 		@cursor.update_position
-		if (!@show_menu)
+		if (@game_state == :playing)
 			update_target_location
 
 			snake = @universe.snakes.first
@@ -88,9 +91,9 @@ class GameWindow < Gosu::Window
 			@camera.tick(snake.location)
 
 			if button_down? Gosu::KbEscape
-				@show_menu = true
+				@game_state = :main_menu
 			end
-		else
+		elsif @game_state == :main_menu
 			if button_down? Gosu::MsLeft
 				@menu.clicked(Point.new(mouse_x, mouse_y))
 			end
@@ -102,21 +105,17 @@ class GameWindow < Gosu::Window
 		# not even advance animations.
 		# If you write draw in a functional, read-only style then you are safe.
 
-		if (@show_menu)
+		if (@game_state == :main_menu)
 			@menu.draw
-		else
-			if @new_game
-				@new_game.draw("Your Score was #{@score}", 5, 200, 100)
-				@new_game.draw("Press Return to Try Again", 5, 250, 100)
-				@new_game.draw("Or Escape to Close", 5, 300, 100)
-			else
-				Gosu::translate(@camera.x, @camera.y) do
-					@universe.draw
-				end
-
-				@text_object.draw("Score: #{@score}",5,5,0)
-				@text_object.draw("FPS: #{Gosu::fps}",430,5,0)
+		elsif (@game_state == :playing)
+			Gosu::translate(@camera.x, @camera.y) do
+				@universe.draw
 			end
+
+			@text_object.draw("Score: #{@score}",5,5,0)
+      if (@configuration.show_fps)
+        @text_object.draw("FPS: #{Gosu::fps}",430,5,0)
+      end
 		end
 		
 		# Always draw cursor
