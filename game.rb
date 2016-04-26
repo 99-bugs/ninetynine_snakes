@@ -79,7 +79,7 @@ class GameWindow < Gosu::Window
   end
 
 	def update
-		@cursor.update_position
+		@cursor.update
 		if (@game_state == :playing)
 			update_target_location
 

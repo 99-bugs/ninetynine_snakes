@@ -20,7 +20,7 @@ class Cursor < GameObject
     super(window, location, width, height, sprite_params)
   end
 
-  def update_position
+  def update
     @location = Point.new(@window.mouse_x, @window.mouse_y)
   end
 
