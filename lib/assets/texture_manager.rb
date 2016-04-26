@@ -14,8 +14,8 @@ class TextureManager
     end
   end
 
-  def load_texture(file, key, spritesize)
-    @assets[key] = Gosu::Image::load_tiles(TEXTURE_DIR + file, spritesize, spritesize)
+  def load_texture(file, key, sprite_width, sprite_height)
+    @assets[key] = Gosu::Image::load_tiles(TEXTURE_DIR + file, sprite_width, sprite_height)
   end
 
   def get_image(key)
