@@ -35,8 +35,8 @@ class GameWindow < Gosu::Window
 		@camera.tick(snake.location)
 
 		# Direction vector is based on center of window (because so are mouse coordinates)
-    	@center = Point.new(width/2, height/2)
-    	@dir_vector = (Vector.new(Point.new(0,0), @center)).to_unity
+    @center = Point.new(width/2, height/2)
+    @dir_vector = (Vector.new(Point.new(0,0), @center)).to_unity
 
     # Create a menu
     build_menu
@@ -50,7 +50,7 @@ class GameWindow < Gosu::Window
 		@menu.add('Start Game', lambda { @show_menu = false })
 		@menu.add('Options', lambda { puts "Showing Options"})
 		@menu.add('Credits', lambda { puts "Showing Credits"})
-		@menu.add('Exit Game', lambda { puts "Exiting Game"})
+		@menu.add('Exit Game', lambda { self.close })
 	end
 
   def update_target_location
@@ -88,7 +88,7 @@ class GameWindow < Gosu::Window
 			@camera.tick(snake.location)
 
 			if button_down? Gosu::KbEscape
-				self.close
+				@show_menu = true
 			end
 		else
 			if button_down? Gosu::MsLeft
