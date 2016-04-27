@@ -119,35 +119,11 @@ class Snake
   end
 
   def eat_closeby_food
-
     distance = head.width / 2
     @game.universe.food.get_nearby_food(location, distance).each do |food|
       grow(1.0 * food.grow_factor / number_of_segments)
-      #@score += food.score
       @game.universe.food.destroy food
     end
-
-
-    # # Determine snake growth
-    # grow_length = 0
-    # eaten.each do |e|
-    #   grow_length += 1.0 * e.grow_factor / @snakes.player.number_of_segments
-    #   if (e.kind_of?(Bomb))
-    #     @window.soundmanager.play('eat_bomb')
-    #   else
-    #     @window.soundmanager.play('eat_dot')
-    #   end
-    # end
-    # @snakes.player.grow(grow_length)
-    #
-    # # Give snake score
-    # if (grow_length > 0)
-    #   score = 5 * grow_length
-    # else
-    #   score = 1 * grow_length
-    # end
-    # @snakes.player.score += score
-
   end
 
 end

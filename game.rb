@@ -84,7 +84,7 @@ class GameWindow < Gosu::Window
 
 			# Move the snake towards the mouse pointer
 			@player.update(@dir_vector)
-			@camera.tick(@player.location)
+			@camera.update(@player.location)
 
 			if button_down? Gosu::KbEscape
 				@game_state = :main_menu

@@ -20,7 +20,6 @@ class Universe
       @background.update @snakes.player.location
       @food.update
       @snakes.update
-      #check_for_dot_collisions
   end
 
   def draw

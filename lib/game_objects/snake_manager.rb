@@ -18,8 +18,6 @@ class SnakeManager
 
   def update
 
-
-
   end
 
   def add_snake(snake)
