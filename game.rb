@@ -7,7 +7,7 @@ require './lib/menu/menu'
 require './lib/configuration'
 
 class GameWindow < Gosu::Window
-	attr_reader :soundmanager, :texturemanager, :center
+	attr_reader :soundmanager, :texturemanager, :center, :universe
 
 	def initialize
 		super 640, 480, false
@@ -20,16 +20,13 @@ class GameWindow < Gosu::Window
 
 		# Create the game universe
 		@universe = Universe.new(self)
-		snake = Snake.new(self, 10)
-		@universe.add_snake(snake)
-		@universe.generate_random_dots(100)
-		@universe.generate_random_bombs(10)
+		@player = @universe.snakes.player
 
 		@cursor = Cursor.new(self)
 
 		# Create camera
 		@camera = Camera.new(width, height)
-		@camera.tick(snake.location)
+		@camera.tick(@player.location)
 
 		# Direction vector is based on center of window (because so are mouse coordinates)
     @center = Point.new(width/2, height/2)
@@ -79,16 +76,15 @@ class GameWindow < Gosu::Window
 		if (@game_state == :playing)
 			update_target_location
 
-			snake = @universe.snakes.first
 			begin
 			  @universe.update
 			rescue Exception => die
 			  @game_state = :game_over
 			end
-			
+
 			# Move the snake towards the mouse pointer
-			snake.move(@dir_vector)
-			@camera.tick(snake.location)
+			@player.update(@dir_vector)
+			@camera.tick(@player.location)
 
 			if button_down? Gosu::KbEscape
 				@game_state = :main_menu
@@ -112,15 +108,15 @@ class GameWindow < Gosu::Window
 				@universe.draw
 			end
 
-			@text_object.draw("Score: #{@universe.snakes.first.length.round(2)}",5,5,0)
+			@text_object.draw("Score: #{@player.length.round(2)}",5,5,0)
       if (@configuration.show_fps)
         @text_object.draw("FPS: #{Gosu::fps}",430,5,0)
       end
     elsif (@game_state == :game_over)
-			@text_object.draw("Score: #{@universe.snakes.first.score.round(2)}",5,5,0)
+			@text_object.draw("Score: #{@player.score.round(2)}",5,5,0)
       @text_object.draw("YOU ARE DEAD",200,200,0)
 		end
-		
+
 		# Always draw cursor
 		@cursor.draw
 	end
