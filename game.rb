@@ -10,9 +10,8 @@ class GameWindow < Gosu::Window
 	attr_reader :soundmanager, :texturemanager, :center
 
 	def initialize
-		super 640, 480, false
+		super 800, 450, true
 		self.caption = "99-Snakes"
-		@score = 0
 		@text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
 
 		@soundmanager = SoundManager.new
