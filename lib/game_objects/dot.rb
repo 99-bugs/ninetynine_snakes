@@ -40,7 +40,7 @@ class Dot < GameObject
 
   def update
       @motion[:angle] += @motion[:speed]
-      location.x = @center_location.x + Math.cos(@motion[:angle]) * @motion[:radius]
-      location.y = @center_location.y + Math.sin(@motion[:angle]) * @motion[:radius]
+      @location.x = @center_location.x + Math.cos(@motion[:angle]) * @motion[:radius]
+      @location.y = @center_location.y + Math.sin(@motion[:angle]) * @motion[:radius]
   end
 end
