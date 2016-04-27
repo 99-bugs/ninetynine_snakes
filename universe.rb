@@ -2,6 +2,7 @@ require './lib/game_objects/bomb'
 require './lib/game_objects/dot'
 require './lib/game_objects/segment'
 require './lib/game_objects/cursor'
+require './lib/game_objects/background'
 require './snake'
 
 class Universe
@@ -14,9 +15,11 @@ class Universe
     @snakes = []
 
     # Load assets
-    @window.texturemanager.load_image('background3.jpg', 'background')
+
     @window.soundmanager.load_file('eat_dot.wav', 'eat_dot')
     @window.soundmanager.load_file('eat_bomb.wav', 'eat_bomb')
+
+    @background = Background.new @window
   end
 
   def generate_random_dots(count)
@@ -87,6 +90,7 @@ class Universe
   end
 
   def update
+      @background.update @snakes.first.location
       @dots.each do |dot|
           dot.update
       end
@@ -94,20 +98,7 @@ class Universe
   end
 
   def draw
-      background = @window.texturemanager.get_image('background')
-      snake = @snakes.first
-      vertical_tiles = (@window.height.to_f / background.height.to_f).ceil + 1
-      horizonal_tiles = (@window.width.to_f / background.width.to_f).ceil + 1
-      horizonal_tiles.times { |row|
-          vertical_tiles.times { |column|
-              background.draw(
-                (((snake.location.x / background.height).floor + column) * background.height) - ((background.height * (vertical_tiles - 1)) / 2),
-                (((snake.location.y / background.width).floor + row) * background.width) - ((background.width * (horizonal_tiles - 1)) / 2),
-                -100
-              )
-          }
-      }
-
+    @background.draw
     @dots.each do |d|
       d.draw
     end
