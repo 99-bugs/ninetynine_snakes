@@ -1,3 +1,4 @@
+require './lib/game_objects/bomb'
 require './lib/game_objects/dot'
 require './lib/game_objects/segment'
 require './lib/game_objects/cursor'
@@ -19,6 +20,12 @@ class Universe
   def generate_random_dots(count)
     for i in 0..count do
       @dots << Dot.new(@window, Point.new(rand(0..1000), rand(0..1000)))
+    end
+  end
+
+  def generate_random_bombs(count)
+    for i in 0..count do
+      @dots << Bomb.new(@window, Point.new(rand(0..1000), rand(0..1000)))
     end
   end
 
@@ -50,6 +57,12 @@ class Universe
         end
     end
 
+    @eatendots = @dots.select { |d| Gosu::distance(snake.x, snake.y, d.x, d.y) <=  snake.head.width / 2 }
+    @eatendots.each do |d|
+      if (d.kind_of?(Bomb))
+        puts "Boem"
+      end
+    end
 
     @dots = @dots.select { |d| Gosu::distance(snake.x, snake.y, d.x, d.y) >  snake.head.width / 2 }
 

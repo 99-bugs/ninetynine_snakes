@@ -2,8 +2,17 @@ require File.expand_path("../game_object", __FILE__)
 
 class Segment < GameObject
 
-  def initialize(window, location, color=Gosu::Color::GREEN)
+  def initialize(window, location, width=nil, height=nil, color=Gosu::Color::GREEN)
 
+    sprite_params = default_sprite if sprite_params.nil?
+    width = sprite_params[:width] * sprite_params[:size_factor] if width.nil?
+    height = sprite_params[:height] * sprite_params[:size_factor] if height.nil?
+
+    super(window, location, width, height, color)
+    set_sprite(sprite_params)
+  end
+
+  def default_sprite
     sprite_params = {
       file: 'snake.png',
       key: 'segment',
@@ -11,9 +20,6 @@ class Segment < GameObject
       width: 96,
       height: 96
     }
-    width = height = sprite_params[:width] * sprite_params[:size_factor]
-
-    super(window, location, width, height, sprite_params, color)
   end
 
   def clone

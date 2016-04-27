@@ -3,6 +3,14 @@ require File.expand_path("../../2d/point", __FILE__)
 class GameObject
   attr_accessor :location, :width, :height
 
+  def initialize(window, location, width, height, color=Gosu::Color::RED)
+    @window = window
+    @location = location
+    @color = color
+    @width = width
+    @height = height
+  end
+
   # sprite_params = {
   #     file: 'filename.png',
   #     key: 'dot',
@@ -10,14 +18,8 @@ class GameObject
   #     width: 32,
   #     height: 48
   # }
-  def initialize(window, location, width, height, sprite_params={}, color=Gosu::Color::RED)
-    @window = window
-    @location = location
-    @color = color
-    @width = width
-    @height = height
+  def set_sprite(sprite_params={})
     @sprite_params = sprite_params
-
     if (!(@sprite_params.nil? || @sprite_params.empty?))
       @window.texturemanager.load_texture(@sprite_params[:file], @sprite_params[:key],
         @sprite_params[:width], @sprite_params[:height])

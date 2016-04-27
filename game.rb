@@ -23,6 +23,7 @@ class GameWindow < Gosu::Window
 		snake = Snake.new(self, 10)
 		@universe.add_snake(snake)
 		@universe.generate_random_dots(100)
+		@universe.generate_random_bombs(10)
 
 		@cursor = Cursor.new(self)
 

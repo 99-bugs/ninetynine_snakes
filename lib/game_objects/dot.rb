@@ -6,8 +6,20 @@ class Dot < GameObject
 
   attr_accessor :center_location
 
-  def initialize(window, location, color=Gosu::Color::RED)
+  def initialize(window, location, width=nil, height=nil, sprite_params=nil, color=Gosu::Color::RED)
 
+    sprite_params = default_sprite if sprite_params.nil?
+    width = sprite_params[:width] * sprite_params[:size_factor] if width.nil?
+    height = sprite_params[:height] * sprite_params[:size_factor] if height.nil?
+
+    super(window, location, width, height, color)
+    set_sprite(sprite_params)
+
+    @center_location = location.clone
+    generate_motion
+  end
+
+  def default_sprite
     sprite_params = {
       file: 'snake.png',
       key: 'dot',
@@ -15,11 +27,6 @@ class Dot < GameObject
       width: 96,
       height: 96
     }
-    width = height = sprite_params[:width] * sprite_params[:size_factor]
-
-    super(window, location, width, height, sprite_params, color)
-    @center_location = location.clone
-    generate_motion
   end
 
   def generate_motion
