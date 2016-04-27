@@ -15,6 +15,8 @@ class Universe
 
     # Load assets
     @window.texturemanager.load_image('background3.jpg', 'background')
+    @window.soundmanager.load_file('eat_dot.wav', 'eat_dot')
+    @window.soundmanager.load_file('eat_bomb.wav', 'eat_bomb')
   end
 
   def generate_random_dots(count)
@@ -57,18 +59,31 @@ class Universe
         end
     end
 
-    @eatendots = @dots.select { |d| Gosu::distance(snake.x, snake.y, d.x, d.y) <=  snake.head.width / 2 }
-    @eatendots.each do |d|
-      if (d.kind_of?(Bomb))
-        puts "Boem"
-      end
-    end
+    # Determine the things the snake ate
+    eaten = @dots.select { |d| Gosu::distance(snake.x, snake.y, d.x, d.y) <=  snake.head.width / 2 }
 
+    # Determine remaining dots
     @dots = @dots.select { |d| Gosu::distance(snake.x, snake.y, d.x, d.y) >  snake.head.width / 2 }
 
-    if @dots.length < number_of_dots
-      @snakes.first.grow(5*(number_of_dots - @dots.length))
+    # Determine snake growth
+    grow_length = 0
+    eaten.each do |e|
+      grow_length += 1.0 * e.grow_factor / @snakes.first.number_of_segments
+      if (e.kind_of?(Bomb))
+        @window.soundmanager.play('eat_bomb')
+      else
+        @window.soundmanager.play('eat_dot')
+      end
     end
+    @snakes.first.grow(grow_length)
+
+    # Give snake score
+    if (grow_length > 0)
+      score = 5 * grow_length
+    else
+      score = 1 * grow_length
+    end
+    @snakes.first.score += score
   end
 
   def update

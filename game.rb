@@ -80,8 +80,12 @@ class GameWindow < Gosu::Window
 			update_target_location
 
 			snake = @universe.snakes.first
-			@universe.update
-
+			begin
+			  @universe.update
+			rescue Exception => die
+			  @game_state = :game_over
+			end
+			
 			# Move the snake towards the mouse pointer
 			snake.move(@dir_vector)
 			@camera.tick(snake.location)
@@ -108,10 +112,13 @@ class GameWindow < Gosu::Window
 				@universe.draw
 			end
 
-			@text_object.draw("Score: #{@score}",5,5,0)
+			@text_object.draw("Score: #{@universe.snakes.first.length.round(2)}",5,5,0)
       if (@configuration.show_fps)
         @text_object.draw("FPS: #{Gosu::fps}",430,5,0)
       end
+    elsif (@game_state == :game_over)
+			@text_object.draw("Score: #{@universe.snakes.first.score.round(2)}",5,5,0)
+      @text_object.draw("YOU ARE DEAD",200,200,0)
 		end
 		
 		# Always draw cursor

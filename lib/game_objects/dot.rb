@@ -5,8 +5,9 @@ class Dot < GameObject
   MOTION_MAX_RADIUS = 10
 
   attr_accessor :center_location
+  attr_reader :grow_factor
 
-  def initialize(window, location, width=nil, height=nil, sprite_params=nil, color=Gosu::Color::RED)
+  def initialize(window, location, width=nil, height=nil, sprite_params=nil, grow_factor=10, color=Gosu::Color::RED)
 
     sprite_params = default_sprite if sprite_params.nil?
     width = sprite_params[:width] * sprite_params[:size_factor] if width.nil?
@@ -17,6 +18,7 @@ class Dot < GameObject
 
     @center_location = location.clone
     generate_motion
+    @grow_factor = grow_factor
   end
 
   def default_sprite

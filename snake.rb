@@ -2,7 +2,9 @@ require './lib/2d/vector'
 
 class Snake
 
-    attr_accessor :size
+  attr_accessor :size   # Diameter of segments
+  attr_reader :length
+  attr_accessor :score
 
   def initialize(window, start_length=5, size=10)
     @segments = []
@@ -10,14 +12,13 @@ class Snake
     @size = size
     @speed = 5
     @turn_radius = 30
+    @length = 1.0*start_length
+    @score = 0.0
 
     start_length.times do |i|
       @segments << Segment.new(@window, Point.new(100, 100+i*@size))
     end
     @prev_angle = 0
-
-    # Assets
-    @window.soundmanager.load_file('eat_dot.wav', 'eat_dot')
   end
 
   def move(direction_vector)
@@ -47,8 +48,7 @@ class Snake
       end
   end
 
-  # Returns length of snake
-  def length
+  def number_of_segments
     @segments.length
   end
 
@@ -63,9 +63,19 @@ class Snake
     return @segments.first
   end
 
-  def grow(number_of_segments)
-    @segments << Segment.new(@window, Point.new(0,0))
-    @window.soundmanager.play('eat_dot')
+  def grow(length=0.0)
+    @length += length
+
+    # Yes, your snake can die !
+    raise "You are dead" unless @length > 0
+
+    if (@length.floor > number_of_segments)
+      (@length.floor - number_of_segments).times do |i|
+        @segments << Segment.new(@window, Point.new(0,0))
+      end
+    elsif (@length.floor < number_of_segments)
+      @segments.pop(number_of_segments - @length.floor)
+    end
   end
 
   def x
