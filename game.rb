@@ -40,6 +40,7 @@ class GameWindow < Gosu::Window
     @game_state = :main_menu
 
     @configuration = Configuration.new
+    puts @configuration.inspect
 
     # Build multiplayer screen
     build_multiplayer_info_screen
