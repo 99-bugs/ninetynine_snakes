@@ -6,9 +6,9 @@ class Snake
   attr_reader :length
   attr_accessor :score
 
-  def initialize(window, start_length=5, size=10)
+  def initialize(game, start_length=5, size=10)
     @segments = []
-    @window = window
+    @game = game
     @size = size
     @speed = 5
     @turn_radius = 30
@@ -16,12 +16,17 @@ class Snake
     @score = 0.0
 
     start_length.times do |i|
-      @segments << Segment.new(@window, Point.new(100, 100+i*@size))
+      @segments << Segment.new(@game, Point.new(100, 100+i*@size))
     end
     @prev_angle = 0
+
+    @gravity = {
+        force: 10,
+        distance: 2.5 * head.width / 2  #note: head.width => sprite width !
+    }
   end
 
-  def move(direction_vector)
+  def update(direction_vector)
       delta_angle = direction_vector.angle - @prev_angle
       delta_angle += Math::PI * 2 while delta_angle < Math::PI
       delta_angle -= Math::PI * 2 while delta_angle > Math::PI
@@ -29,6 +34,9 @@ class Snake
 
       move_head angle
       move_body
+
+      suck_in_nearby_food
+      eat_closeby_food
       @prev_angle = angle
   end
 
@@ -63,6 +71,10 @@ class Snake
     return @segments.first
   end
 
+  def eat food
+
+  end
+
   def grow(length=0.0)
     @length += length
 
@@ -71,7 +83,7 @@ class Snake
 
     if (@length.floor > number_of_segments)
       (@length.floor - number_of_segments).times do |i|
-        @segments << Segment.new(@window, Point.new(0,0))
+        @segments << Segment.new(@game, Point.new(0,0))
       end
     elsif (@length.floor < number_of_segments)
       @segments.pop(number_of_segments - @length.floor)
@@ -88,6 +100,30 @@ class Snake
 
   def location
       head.location
+  end
+
+  def suck_in_nearby_food
+    snake = @game.universe.player
+    @game.universe.food.get_nearby_food(location, @gravity[:distance]).each do |food|
+        distance = Gosu::distance(snake.x, snake.y, food.x, food.y)
+        distance_factor = 1 - (distance / @gravity[:distance])
+        if distance < @gravity[:distance]
+            dx = snake.x - food.x
+            dy = snake.y - food.y
+            dx = dx / @gravity[:force] * distance_factor
+            dy = dy / @gravity[:force] * distance_factor
+            food.center_location.x += dx
+            food.center_location.y += dy
+        end
+    end
+  end
+
+  def eat_closeby_food
+    distance = head.width / 2
+    @game.universe.food.get_nearby_food(location, distance).each do |food|
+      grow(1.0 * food.grow_factor / number_of_segments)
+      @game.universe.food.destroy food
+    end
   end
 
 end

@@ -19,6 +19,8 @@ class Dot < GameObject
     @center_location = location.clone
     generate_motion
     @grow_factor = grow_factor
+
+    @window.soundmanager.load_file('eat_dot.wav', 'eat_dot')
   end
 
   def default_sprite
@@ -45,4 +47,9 @@ class Dot < GameObject
       @location.x = @center_location.x + Math.cos(@motion[:angle]) * @motion[:radius]
       @location.y = @center_location.y + Math.sin(@motion[:angle]) * @motion[:radius]
   end
+
+  def destroy
+    @window.soundmanager.play('eat_dot')
+  end
+
 end

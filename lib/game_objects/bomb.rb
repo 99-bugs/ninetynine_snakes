@@ -9,6 +9,8 @@ class Bomb < Dot
     height = sprite_params[:height] * sprite_params[:size_factor] if height.nil?
 
     super(window, location, width, height, sprite_params, grow_factor, color)
+
+    @window.soundmanager.load_file('eat_bomb.wav', 'eat_bomb')
   end
 
   def default_sprite
@@ -19,5 +21,9 @@ class Bomb < Dot
       width: 96,
       height: 96
     }
+  end
+
+  def destroy
+    @window.soundmanager.play('eat_bomb')
   end
 end
