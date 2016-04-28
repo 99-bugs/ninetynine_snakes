@@ -5,9 +5,10 @@ require './lib/assets/sound_manager'
 require './lib/assets/texture_manager'
 require './lib/menu/menu'
 require './lib/configuration'
+require './lib/client'
 
 class GameWindow < Gosu::Window
-	attr_reader :soundmanager, :texturemanager, :center, :universe
+	attr_reader :soundmanager, :texturemanager, :center, :universe, :server
 
 	def initialize
 		super 640, 480, false
@@ -18,6 +19,8 @@ class GameWindow < Gosu::Window
 		@soundmanager = SoundManager.new
 		@texturemanager = TextureManager.new(self)
 
+		@server = Client.new self, "littlewan"
+
 		# Create the game universe
 		@universe = Universe.new(self)
 		@player = @universe.snakes.player
@@ -26,7 +29,7 @@ class GameWindow < Gosu::Window
 
 		# Create camera
 		@camera = Camera.new(width, height)
-		@camera.tick(@player.location)
+		@camera.update(@player.location)
 
 		# Direction vector is based on center of window (because so are mouse coordinates)
     @center = Point.new(width/2, height/2)
@@ -80,6 +83,8 @@ class GameWindow < Gosu::Window
 			  @universe.update
 			rescue Exception => die
 			  @game_state = :game_over
+			  puts die
+			  puts die.backtrace
 			end
 
 			# Move the snake towards the mouse pointer
