@@ -7,13 +7,14 @@ class InputScreen
     @callback = callback
   end
 
-  def add_input(font, label, key)
+  def add_input(font, label, key, initial=nil)
     @input_fields << {
       key: key,
       label: label,
       field: TextField.new(@window, font, 100, 80+@input_fields.count*font.height*3),
       font: font
     }
+    @input_fields.last[:field].text = initial if !initial.nil?
   end
 
   def update

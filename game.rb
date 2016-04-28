@@ -56,8 +56,8 @@ class GameWindow < Gosu::Window
 
 	def build_multiplayer_info_screen
     @multiplayer_info_screen = InputScreen.new(self, method(:multiplayer_info_callback))
-    @multiplayer_info_screen.add_input(@text_object, "Please enter server IP", :server_ip)
-    @multiplayer_info_screen.add_input(@text_object, "Please enter your NickName", :nickname)
+    @multiplayer_info_screen.add_input(@text_object, "Please enter server IP", :server_ip, @configuration.server_ip)
+    @multiplayer_info_screen.add_input(@text_object, "Please enter your NickName", :nickname, @configuration.nickname)
 	end
 
 	def multiplayer_info_callback
