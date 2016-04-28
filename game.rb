@@ -6,12 +6,13 @@ require './lib/assets/texture_manager'
 require './lib/menu/menu'
 require './lib/configuration'
 require './lib/textfield'
+require './lib/menu/input_screen'
 
 class GameWindow < Gosu::Window
 	attr_reader :soundmanager, :texturemanager, :center, :universe
 
 	def initialize
-		super 800, 450, true
+		super 800, 450, false
 		self.caption = "99-Snakes"
 		@text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
 
@@ -39,8 +40,9 @@ class GameWindow < Gosu::Window
     @game_state = :main_menu
 
     @configuration = Configuration.new
-    @input_server_ip = TextField.new(self, @text_object, 200, 200)
-    @input_nickname = TextField.new(self, @text_object, 200, 300)
+
+    # Build multiplayer screen
+    build_multiplayer_info_screen
 	end
 
 	def build_menu
@@ -50,6 +52,25 @@ class GameWindow < Gosu::Window
 		@menu.add('Options', lambda { puts "Showing Options"})
 		@menu.add('Credits', lambda { puts "Showing Credits"})
 		@menu.add('Exit Game', lambda { self.close })
+	end
+
+	def build_multiplayer_info_screen
+    @multiplayer_info_screen = InputScreen.new(self, method(:multiplayer_info_callback))
+    @multiplayer_info_screen.add_input(@text_object, "Please enter server IP", :server_ip)
+    @multiplayer_info_screen.add_input(@text_object, "Please enter your NickName", :nickname)
+	end
+
+	def multiplayer_info_callback
+  	server_ip = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/.match(@multiplayer_info_screen.get_text(:server_ip))
+  	if (server_ip)
+  		@configuration.server_ip = server_ip[0]
+  	else
+  		@input_server_ip.text = "Invalid ip"
+  	end
+  	@configuration.nickname = @multiplayer_info_screen.get_text(:nickname)
+
+  	# Change gamestate
+  	@gamestate = :multiplayer
 	end
 
   def update_target_location
@@ -98,23 +119,7 @@ class GameWindow < Gosu::Window
 			end
 		elsif @game_state == :multiplayer_server
 			# Here we need to request some info from player about the server
-
-	    if button_down? Gosu::MsLeft
-	      # Mouse click: Select text field based on mouse position.
-	      self.text_input = @input_server_ip if @input_server_ip.under_point?(mouse_x, mouse_y)
-	      self.text_input = @input_nickname if @input_nickname.under_point?(mouse_x, mouse_y)
-	    elsif button_down? Gosu::KbReturn
-	    	server_ip = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/.match(@input_server_ip.text)
-	    	if (server_ip)
-	    		@configuration.server_ip = server_ip[0]
-	    	else
-	    		@input_server_ip.text = "Invalid ip"
-	    	end
-	    	@configuration.nickname = @input_nickname.text
-
-	    	# Change gamestate
-	    	@gamestate = :multiplayer
-	    end
+			@multiplayer_info_screen.update
 		end
 	end
 
@@ -138,10 +143,7 @@ class GameWindow < Gosu::Window
 			@text_object.draw("Score: #{@player.score.round(2)}",5,5,0)
       @text_object.draw("YOU ARE DEAD",200,200,0)
     elsif (@game_state == :multiplayer_server)
-    	@text_object.draw("Please enter ip of server",200,150,0)
-    	@text_object.draw("Please enter your nickname",200,250,0)
-    	@input_server_ip.draw
-    	@input_nickname.draw
+    	@multiplayer_info_screen.draw
 		end
 
 		# Always draw cursor
