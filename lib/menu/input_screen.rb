@@ -1,3 +1,5 @@
+require File.expand_path("../../ip_address", __FILE__)
+
 class InputScreen
 
   def initialize(window, callback=nil)
@@ -7,11 +9,18 @@ class InputScreen
     @callback = callback
   end
 
-  def add_input(font, label, key, initial=nil)
+  def add_input(font, label, key, type, initial=nil)
+    field = nil
+    if (type == :ip_address)
+      field = IpAddress.new(@window, font, 100, 80+@input_fields.count*font.height*3)
+    else
+      field = TextField.new(@window, font, 100, 80+@input_fields.count*font.height*3)
+    end
+
     @input_fields << {
       key: key,
       label: label,
-      field: TextField.new(@window, font, 100, 80+@input_fields.count*font.height*3),
+      field: field,
       font: font
     }
     @input_fields.last[:field].text = initial if !initial.nil?
@@ -34,8 +43,22 @@ class InputScreen
     end
   end
 
-  def get_text(key)
+  def get_input(key)
     entry = @input_fields.find { |i| i[:key] == key }
-    entry[:field].text
+    return entry[:field]
+  end
+
+  def all_validates?
+    valid = true
+    @input_fields.each do |f|
+      valid = valid && f[:field].validates?
+    end
+    return valid
+  end
+
+  def validate_all!
+    @input_fields.each do |f|
+      f[:field].validate!
+    end
   end
 end

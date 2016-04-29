@@ -6,23 +6,55 @@ class Configuration
 	attr_accessor :use_mouse, :show_fps, :server_ip, :server_port, :nickname
 
 	def initialize
+    # Default config
+    @nickname = "Player_" + rand(0..1000).to_s
+    @use_mouse = true
+    @show_fps = false
+    @server_ip = "127.0.0.1"
+    @server_port = 9956
+
     read
 	end
 
-  def to_yaml
+  def to_hash
     config = Hash.new
 
     config['player'] = Hash.new
-    config['player']['nickname'] = @nickname
-    config['input'] = Hash.new
-    config['input']['use_mouse'] = @use_mouse
-    config['video'] = Hash.new
-    config['video']['show_fps'] = @show_fps
-    config['multiplayer'] = Hash.new
-    config['multiplayer']['server_ip'] = @server_ip
-    config['multiplayer']['server_port'] = @server_port
+    create_option(config['player'], 'nickname', "Enter your NickName:", :text, @nickname)
 
-    return config.to_yaml
+    config['input'] = Hash.new
+    create_option(config['input'], 'use_mouse', "Use mouse for steering? ", :bool, @use_mouse)
+
+    config['video'] = Hash.new
+    create_option(config['video'], 'show_fps', "Show FPS?", :bool, @show_fps)
+
+    config['multiplayer'] = Hash.new
+    create_option(config['multiplayer'], 'server_ip', "IPv4 Address of Server:", :ip_address, @server_ip)
+    create_option(config['multiplayer'], 'server_port', "Port of Server:", :integer, @server_port)
+
+    return config
+  end
+
+  def to_yaml
+    # We need to remove all unneeded info
+    yamlconfig = to_hash.clone
+    yamlconfig.each do |k, category|
+      category.each do |l, option|
+        yamlconfig[k][l] = option['value']
+      end
+    end
+    yamlconfig.to_yaml
+  end
+
+  def from_yaml(yamlconfig)
+    # We need to create similar structure to our config
+    yamlconfig.each do |k, category|
+      category.each do |l, option|
+        yamlconfig[k][l] = Hash.new
+        yamlconfig[k][l]['value'] = option
+      end
+    end
+    yamlconfig
   end
 
   def from_yaml(config)
@@ -41,23 +73,15 @@ class Configuration
   end
 
   def read
-    def_config = default_config
-    config = YAML.load_file(CONFIG_FILE)
-    final_config = def_config.merge(config)
-    from_yaml(final_config)
+    # We need to create similar structure to our config
+    yamlconfig = YAML.load_file(CONFIG_FILE)
+    from_yaml(yamlconfig)
   end
 
-  def default_config
-    config = Hash.new
-    config['player'] = Hash.new
-    config['player']['nickname'] = "Guest" + rand(0..1000).to_s
-    config['input'] = Hash.new
-    config['input']['use_mouse'] = true
-    config['video'] = Hash.new
-    config['video']['show_fps'] = false
-    config['multiplayer'] = Hash.new
-    config['multiplayer']['server_ip'] = "127.0.0.1"
-    config['multiplayer']['server_port'] = 9956
-    return config
+  def create_option(config, key, label, type, default_value)
+    config[key] = Hash.new
+    config[key]['label'] = label
+    config[key]['value'] = default_value
+    config[key]['type'] = type
   end
 end

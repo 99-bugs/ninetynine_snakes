@@ -25,6 +25,13 @@ class TextField < Gosu::TextInput
   def filter text
     text
   end
+
+  def validates?
+    true
+  end
+
+  def validate!
+  end
   
   def draw
     # Depending on whether this is the currently selected input or not, change the

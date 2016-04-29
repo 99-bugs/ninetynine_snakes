@@ -7,6 +7,7 @@ require './lib/menu/menu'
 require './lib/configuration'
 require './lib/textfield'
 require './lib/menu/input_screen'
+require './lib/menu/options_screen_factory'
 
 class GameWindow < Gosu::Window
 	attr_reader :soundmanager, :texturemanager, :center, :universe
@@ -40,7 +41,6 @@ class GameWindow < Gosu::Window
     @game_state = :main_menu
 
     @configuration = Configuration.new
-    puts @configuration.inspect
 
     # Build multiplayer screen
     build_multiplayer_info_screen
@@ -56,22 +56,20 @@ class GameWindow < Gosu::Window
 	end
 
 	def build_multiplayer_info_screen
-    @multiplayer_info_screen = InputScreen.new(self, method(:multiplayer_info_callback))
-    @multiplayer_info_screen.add_input(@text_object, "Please enter server IP", :server_ip, @configuration.server_ip)
-    @multiplayer_info_screen.add_input(@text_object, "Please enter your NickName", :nickname, @configuration.nickname)
+    @multiplayer_info_screen = OptionsScreenFactory.build_multiplayer_start_screen(self,
+      @text_object, @configuration, method(:multiplayer_info_callback))
 	end
 
 	def multiplayer_info_callback
-  	server_ip = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/.match(@multiplayer_info_screen.get_text(:server_ip))
-  	if (server_ip)
-  		@configuration.server_ip = server_ip[0]
-  	else
-  		@input_server_ip.text = "Invalid ip"
-  	end
-  	@configuration.nickname = @multiplayer_info_screen.get_text(:nickname)
+    if (@multiplayer_info_screen.all_validates?)
+      @configuration.server_ip = @multiplayer_info_screen.get_input('server_ip').text
+      @configuration.nickname = @multiplayer_info_screen.get_input('nickname').text
 
-  	# Change gamestate
-  	@gamestate = :multiplayer
+      # Change gamestate
+      @gamestate = :multiplayer
+    else
+      @multiplayer_info_screen.validate_all!
+    end
 	end
 
   def update_target_location
