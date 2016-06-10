@@ -8,9 +8,10 @@ require './lib/configuration'
 require './lib/textfield'
 require './lib/menu/input_screen'
 require './lib/menu/options_screen_factory'
+require './lib/client'
 
 class GameWindow < Gosu::Window
-	attr_reader :soundmanager, :texturemanager, :center, :universe
+	attr_reader :soundmanager, :texturemanager, :center, :universe, :server
 
 	def initialize
 		super 800, 450, false
@@ -19,6 +20,8 @@ class GameWindow < Gosu::Window
 
 		@soundmanager = SoundManager.new
 		@texturemanager = TextureManager.new(self)
+
+		@server = Client.new self, "littlewan"
 
 		# Create the game universe
 		@universe = Universe.new(self)
@@ -103,6 +106,8 @@ class GameWindow < Gosu::Window
 			  @universe.update
 			rescue Exception => die
 			  @game_state = :game_over
+			  puts die
+			  puts die.backtrace
 			end
 
 			# Move the snake towards the mouse pointer

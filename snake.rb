@@ -4,7 +4,7 @@ class Snake
 
   attr_accessor :size   # Diameter of segments
   attr_reader :length
-  attr_accessor :score
+  attr_accessor :score, :id
 
   def initialize(game, start_length=5, size=10)
     @segments = []
@@ -14,6 +14,8 @@ class Snake
     @turn_radius = 30
     @length = 1.0*start_length
     @score = 0.0
+
+
 
     start_length.times do |i|
       @segments << Segment.new(@game, Point.new(100, 100+i*@size))
@@ -27,24 +29,36 @@ class Snake
   end
 
   def update(direction_vector)
+
+      @game.server.update self
+
       delta_angle = direction_vector.angle - @prev_angle
       delta_angle += Math::PI * 2 while delta_angle < Math::PI
       delta_angle -= Math::PI * 2 while delta_angle > Math::PI
       angle = @prev_angle + delta_angle / @turn_radius
 
       move_head angle
+
+      @prev_angle = angle
+  end
+
+  def update_head_position x, y
+      @segments.first.location.x = x
+      @segments.first.location.y = y
+
       move_body
 
       suck_in_nearby_food
       eat_closeby_food
-      @prev_angle = angle
   end
 
   def move_head(angle)
       dx = Math.cos(angle) * @size / @speed
       dy = Math.sin(angle) * @size / @speed
-      @segments.first.location.x += dx
-      @segments.first.location.y += dy
+      x = @segments.first.location.x + dx
+      y = @segments.first.location.y + dy
+
+      update_head_position x, y
   end
 
   def move_body
