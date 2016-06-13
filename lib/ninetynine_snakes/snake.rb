@@ -2,7 +2,7 @@ require 'ninetynine_snakes/2d/vector'
 
 class Snake
 
-  attr_reader :segment_diameter, :length
+  attr_reader :length
   attr_accessor :id
 
   def initialize(game, start_length=5, segment_diameter=10)
@@ -11,17 +11,14 @@ class Snake
     @segment_diameter = segment_diameter
     @speed = 0.2
     @turn_radius = 30
-    @length = 1.0*start_length
-
-    start_length.times do |i|
-      @segments << Segment.new(@game, Point.new(100, 100+i*@segment_diameter))
-    end
+    self.length = 1.0*start_length
     @prev_angle = 0
 
     @gravity = {
         force: 10,
         distance: 2.5 * head.width / 2  #note: head.width => sprite width !
     }
+
   end
 
   def update(direction_vector)
@@ -58,16 +55,12 @@ class Snake
   end
 
   def move_body
-      head = @segments.first
-      (1..@segments.size-1).each do |i|
-          destination = Vector.new(@segments[i].location, head).to_unity.enlarge(@segment_diameter)
+      target_segment = @segments.first
+      (1..number_of_segments-1).each do |i|
+          destination = Vector.new(@segments[i].location, target_segment).to_unity.enlarge(@segment_diameter)
           @segments[i].location = destination.head
-          head = @segments[i]
+          target_segment = @segments[i]
       end
-  end
-
-  def number_of_segments
-    @segments.length
   end
 
   def draw
@@ -81,21 +74,6 @@ class Snake
     @segments.first
   end
 
-  def grow(length=0.0)
-    @length += length
-
-    # Yes, your snake can die !
-    raise "You are dead" unless @length > 0
-
-    if (@length.floor > number_of_segments)
-      (@length.floor - number_of_segments).times do |i|
-        @segments << Segment.new(@game, Point.new(0,0))
-      end
-    elsif (@length.floor < number_of_segments)
-      @segments.pop(number_of_segments - @length.floor)
-    end
-  end
-
   def x
       head.x
   end
@@ -106,6 +84,37 @@ class Snake
 
   def location
       head.location
+  end
+
+  def score
+    @length
+  end
+
+  private
+  def number_of_segments
+    @segments.length
+  end
+
+  def length= length
+    @length = length
+    raise "You are dead" unless @length > 0
+
+    length_difference = (@length.floor - number_of_segments).to_i
+    if (length_difference > 0)
+      add_segments length_difference
+    elsif
+      remove_segments -length_difference
+    end
+  end
+
+  def add_segments count
+    count.times do |i|
+      @segments << Segment.new(@game, Point.new(0,0))
+    end
+  end
+
+  def remove_segments count
+    @segments.pop(count)
   end
 
   def suck_in_nearby_food
@@ -127,12 +136,8 @@ class Snake
   def eat_closeby_food
     distance = head.width / 2
     @game.universe.food.get_nearby_food(location, distance).each do |food|
-      grow(1.0 * food.grow_factor / number_of_segments)
+      self.length += (1.0 * food.grow_factor / number_of_segments)
       @game.universe.food.destroy food
     end
-  end
-
-  def score
-    @length
   end
 end
