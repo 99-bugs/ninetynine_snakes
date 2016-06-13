@@ -1,5 +1,5 @@
 class SoundManager
-  SOUND_DIR = "./sounds/"
+  SOUND_DIR = "assets/sounds/"
 
   def initialize()
     @assets = Hash.new

@@ -1,4 +1,4 @@
-require './lib/menu/menu_item'
+require 'ninetynine_snakes/menu/menu_item'
 
 class Menu
   FONT_SIZE = 48

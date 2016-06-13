@@ -1,5 +1,3 @@
-#require '../2d/point.rb'
-
 class Background
 
   def initialize(game)

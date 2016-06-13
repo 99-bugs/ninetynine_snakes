@@ -1,3 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'gosu', '0.10.6'
+# Specify your gem's dependencies in robotwars.gemspec
+gemspec

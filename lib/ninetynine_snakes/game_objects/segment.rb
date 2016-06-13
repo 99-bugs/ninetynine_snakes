@@ -1,4 +1,4 @@
-require File.expand_path("../game_object", __FILE__)
+require 'ninetynine_snakes/game_objects/game_object'
 
 class Segment < GameObject
 

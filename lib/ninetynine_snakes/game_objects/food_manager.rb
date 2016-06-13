@@ -1,5 +1,5 @@
-require './lib/game_objects/dot'
-require './lib/game_objects/bomb'
+require 'ninetynine_snakes/game_objects/dot'
+require 'ninetynine_snakes/game_objects/bomb'
 
 class FoodManager
 

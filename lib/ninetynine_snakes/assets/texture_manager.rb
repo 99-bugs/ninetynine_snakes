@@ -1,5 +1,5 @@
 class TextureManager
-  TEXTURE_DIR = "./textures/"
+  TEXTURE_DIR = "assets/textures/"
 
   def initialize(window)
     @assets = Hash.new

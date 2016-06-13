@@ -1,5 +1,3 @@
-
-
 class SnakeManager
 
   include Enumerable

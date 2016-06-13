@@ -1,4 +1,4 @@
-require File.expand_path("../../2d/point", __FILE__)
+require 'ninetynine_snakes/2d/point'
 
 class GameObject
   attr_accessor :location, :width, :height

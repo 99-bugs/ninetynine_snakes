@@ -1,4 +1,4 @@
-require File.expand_path("../../ip_address", __FILE__)
+require 'ninetynine_snakes/ip_address'
 
 class InputScreen
 

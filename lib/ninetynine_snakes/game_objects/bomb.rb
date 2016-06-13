@@ -1,4 +1,4 @@
-require File.expand_path("../dot", __FILE__)
+require 'ninetynine_snakes/game_objects/dot'
 
 class Bomb < Dot
 

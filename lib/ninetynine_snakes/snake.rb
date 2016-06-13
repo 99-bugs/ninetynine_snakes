@@ -1,4 +1,4 @@
-require './lib/2d/vector'
+require 'ninetynine_snakes/2d/vector'
 
 class Snake
 
