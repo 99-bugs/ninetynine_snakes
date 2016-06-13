@@ -34,8 +34,9 @@ class Client
             location: {
                 x: snake.x,
                 y: snake.y
-                }
-            }
+                },
+            length: snake.length
+        }
         @server.puts JSON.generate msg
     end
 

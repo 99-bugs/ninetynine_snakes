@@ -24,8 +24,6 @@ module NinetynineSnakes
       @soundmanager = SoundManager.new
       @texturemanager = TextureManager.new(self)
 
-      @client = Client.new self, "littlewan"
-
       # Create the game universe
       @universe = Universe.new(self)
       @player = @universe.snakes.player
@@ -47,6 +45,8 @@ module NinetynineSnakes
       @game_state = :main_menu
 
       @configuration = Configuration.new
+
+      @server = Client.new self, @configuration.nickname
 
       # Build multiplayer screen
       build_multiplayer_info_screen
@@ -72,7 +72,7 @@ module NinetynineSnakes
         @configuration.nickname = @multiplayer_info_screen.get_input('nickname').text
 
         # Change gamestate
-        @gamestate = :multiplayer
+        @gamestate = :playing
       else
         @multiplayer_info_screen.validate_all!
       end
@@ -116,10 +116,6 @@ module NinetynineSnakes
         # Move the snake towards the mouse pointer
         @player.update(@dir_vector)
         @camera.update(@player.location)
-
-        if (@gamestate == :multiplayer)
-          @client.update @player
-        end
 
         if button_down? Gosu::KbEscape
           @game_state = :main_menu
