@@ -24,7 +24,7 @@ module NinetynineSnakes
       @soundmanager = SoundManager.new
       @texturemanager = TextureManager.new(self)
 
-      @server = Client.new self, "littlewan"
+      @client = Client.new self, "littlewan"
 
       # Create the game universe
       @universe = Universe.new(self)
@@ -102,7 +102,7 @@ module NinetynineSnakes
 
     def update
       @cursor.update
-      if (@game_state == :playing)
+      if (@game_state == :playing || @gamestate == :multiplayer)
         update_target_location
 
         begin
@@ -116,6 +116,10 @@ module NinetynineSnakes
         # Move the snake towards the mouse pointer
         @player.update(@dir_vector)
         @camera.update(@player.location)
+
+        if (@gamestate == :multiplayer)
+          @client.update @player
+        end
 
         if button_down? Gosu::KbEscape
           @game_state = :main_menu
