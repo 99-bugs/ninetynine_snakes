@@ -2,20 +2,20 @@ require 'ninetynine_snakes/2d/vector'
 
 class Snake
 
-  attr_accessor :size   # Diameter of segments
+  attr_reader :segment_diameter
   attr_reader :length
   attr_accessor :id
 
-  def initialize(game, start_length=5, size=10)
+  def initialize(game, start_length=5, segment_diameter=10)
     @segments = []
     @game = game
-    @size = size
+    @segment_diameter = segment_diameter
     @speed = 0.2
     @turn_radius = 30
     @length = 1.0*start_length
 
     start_length.times do |i|
-      @segments << Segment.new(@game, Point.new(100, 100+i*@size))
+      @segments << Segment.new(@game, Point.new(100, 100+i*@segment_diameter))
     end
     @prev_angle = 0
 
@@ -50,8 +50,8 @@ class Snake
   end
 
   def move_head(angle)
-      dx = Math.cos(angle) * @size * @speed
-      dy = Math.sin(angle) * @size * @speed
+      dx = Math.cos(angle) * @segment_diameter * @speed
+      dy = Math.sin(angle) * @segment_diameter * @speed
       x = @segments.first.location.x + dx
       y = @segments.first.location.y + dy
 
@@ -61,7 +61,7 @@ class Snake
   def move_body
       head = @segments.first
       (1..@segments.size-1).each do |i|
-          destination = Vector.new(@segments[i].location, head).to_unity.enlarge(@size)
+          destination = Vector.new(@segments[i].location, head).to_unity.enlarge(@segment_diameter)
           @segments[i].location = destination.head
           head = @segments[i]
       end
