@@ -10,7 +10,7 @@ class Snake
     @segments = []
     @game = game
     @size = size
-    @speed = 5
+    @speed = 0.2
     @turn_radius = 30
     @length = 1.0*start_length
     @score = 0.0
@@ -53,8 +53,8 @@ class Snake
   end
 
   def move_head(angle)
-      dx = Math.cos(angle) * @size / @speed
-      dy = Math.sin(angle) * @size / @speed
+      dx = Math.cos(angle) * @size * @speed
+      dy = Math.sin(angle) * @size * @speed
       x = @segments.first.location.x + dx
       y = @segments.first.location.y + dy
 
