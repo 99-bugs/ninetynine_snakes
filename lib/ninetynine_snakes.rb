@@ -142,7 +142,7 @@ module NinetynineSnakes
           @universe.draw
         end
 
-        @text_object.draw("Score: #{@player.length.round(2)}",5,5,0)
+        @text_object.draw("Score: #{@player.score.round(2)}",5,5,0)
         if (@configuration.show_fps)
           @text_object.draw("FPS: #{Gosu::fps}",430,5,0)
         end

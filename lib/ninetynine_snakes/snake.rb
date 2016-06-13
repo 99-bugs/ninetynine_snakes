@@ -4,7 +4,7 @@ class Snake
 
   attr_accessor :size   # Diameter of segments
   attr_reader :length
-  attr_accessor :score, :id
+  attr_accessor :id
 
   def initialize(game, start_length=5, size=10)
     @segments = []
@@ -13,9 +13,6 @@ class Snake
     @speed = 0.2
     @turn_radius = 30
     @length = 1.0*start_length
-    @score = 0.0
-
-
 
     start_length.times do |i|
       @segments << Segment.new(@game, Point.new(100, 100+i*@size))
@@ -140,4 +137,7 @@ class Snake
     end
   end
 
+  def score
+    @length
+  end
 end
