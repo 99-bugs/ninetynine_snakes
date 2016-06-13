@@ -1,10 +1,3 @@
-require 'ninetynine_snakes/game_objects/segment'
-require 'ninetynine_snakes/game_objects/cursor'
-require 'ninetynine_snakes/game_objects/background'
-require 'ninetynine_snakes/game_objects/food_manager'
-require 'ninetynine_snakes/game_objects/snake_manager'
-require 'ninetynine_snakes/snake'
-
 class Universe
 
   attr_accessor :food, :snakes

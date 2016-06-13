@@ -1,6 +1,7 @@
 require "ninetynine_snakes/version"
 
 require 'gosu'
+require 'ninetynine_snakes/snake'
 require 'ninetynine_snakes/universe'
 require 'ninetynine_snakes/camera'
 require 'ninetynine_snakes/assets/sound_manager'
@@ -11,6 +12,11 @@ require 'ninetynine_snakes/textfield'
 require 'ninetynine_snakes/menu/input_screen'
 require 'ninetynine_snakes/menu/options_screen_factory'
 require 'ninetynine_snakes/client'
+require 'ninetynine_snakes/game_objects/segment'
+require 'ninetynine_snakes/game_objects/cursor'
+require 'ninetynine_snakes/game_objects/background'
+require 'ninetynine_snakes/game_objects/food_manager'
+require 'ninetynine_snakes/game_objects/snake_manager'
 
 module NinetynineSnakes
   class GameWindow < Gosu::Window
