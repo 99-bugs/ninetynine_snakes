@@ -2,8 +2,7 @@ require 'ninetynine_snakes/2d/vector'
 
 class Snake
 
-  attr_reader :segment_diameter
-  attr_reader :length
+  attr_reader :segment_diameter, :length
   attr_accessor :id
 
   def initialize(game, start_length=5, segment_diameter=10)
@@ -40,8 +39,8 @@ class Snake
   end
 
   def update_head_position x, y
-      @segments.first.location.x = x
-      @segments.first.location.y = y
+      head.location.x = x
+      head.location.y = y
 
       move_body
 
@@ -52,8 +51,8 @@ class Snake
   def move_head(angle)
       dx = Math.cos(angle) * @segment_diameter * @speed
       dy = Math.sin(angle) * @segment_diameter * @speed
-      x = @segments.first.location.x + dx
-      y = @segments.first.location.y + dy
+      x = head.location.x + dx
+      y = head.location.y + dy
 
       update_head_position x, y
   end
@@ -72,18 +71,14 @@ class Snake
   end
 
   def draw
-    # Draw the segments
+    # Draw segments tail to head (head on top)
     @segments.reverse.each do |s|
       s.draw
     end
   end
 
   def head
-    return @segments.first
-  end
-
-  def eat food
-
+    @segments.first
   end
 
   def grow(length=0.0)
