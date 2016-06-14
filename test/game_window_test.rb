@@ -27,6 +27,10 @@ describe GameWindow, "Gosu Game Window" do
     it "should have an input manager" do
       @game.must_respond_to :input_manager
     end
+
+    it "should be in the mainmenu state" do
+      @game.instance_variable_get(:@game_state).must_equal :main_menu
+    end
   end
 
   describe "main menu" do
