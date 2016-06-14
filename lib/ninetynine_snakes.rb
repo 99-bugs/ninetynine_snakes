@@ -52,8 +52,6 @@ module NinetynineSnakes
 
       @configuration = Configuration.new
 
-      @server = Client.new self, @configuration.nickname
-
       # Build multiplayer screen
       build_multiplayer_info_screen
     end
@@ -79,6 +77,7 @@ module NinetynineSnakes
 
         # Change gamestate
         @gamestate = :playing
+        @server = Client.new self, @configuration.nickname
       else
         @multiplayer_info_screen.validate_all!
       end
