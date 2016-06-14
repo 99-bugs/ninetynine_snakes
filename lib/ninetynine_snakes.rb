@@ -19,6 +19,8 @@ require 'ninetynine_snakes/game_objects/food_manager'
 require 'ninetynine_snakes/game_objects/snake_manager'
 require 'ninetynine_snakes/input/input_manager'
 require 'ninetynine_snakes/scene/scene'
+require 'ninetynine_snakes/scene/game_scene'
+require 'ninetynine_snakes/scene/scoreboard_scene'
 
 module NinetynineSnakes
   class GameWindow < Gosu::Window
@@ -44,7 +46,7 @@ module NinetynineSnakes
 
       @center = Point.new(width/2, height/2)
 
-      @scene = Scene.new @universe, @camera, @input_manager
+      @scene = GameScene.new @universe, @camera, @input_manager
 
       # Create a menu
       build_menu
@@ -102,6 +104,10 @@ module NinetynineSnakes
       # # not even advance animations.
       # # If you write draw in a functional, read-only style then you are safe.
       @scene.draw
+    end
+
+    def game_over!
+      @scene = ScoreboardScene.new @universe, @camera, @input_manager
     end
   end
 end

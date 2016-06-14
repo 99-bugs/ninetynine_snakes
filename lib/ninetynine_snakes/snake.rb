@@ -1,5 +1,7 @@
 require 'ninetynine_snakes/2d/vector'
 
+class YouDied < Exception; end
+
 class Snake
 
   attr_reader :length
@@ -97,7 +99,7 @@ class Snake
 
   def length= length
     @length = length
-    raise "You are dead" unless @length > 0
+    raise YouDied.new("You are dead") unless @length > 0
 
     length_difference = (@length.floor - number_of_segments).to_i
     if (length_difference > 0)
