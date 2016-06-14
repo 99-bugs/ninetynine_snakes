@@ -22,8 +22,9 @@ module NinetynineSnakes
   class GameWindow < Gosu::Window
     attr_reader :soundmanager, :texturemanager, :center, :universe, :server
 
-    def initialize
-      super 800, 450, false
+    def initialize width=800,height=450
+      
+      super width, height, false
       self.caption = "99-Snakes"
       @text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
 
