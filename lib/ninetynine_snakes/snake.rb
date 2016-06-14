@@ -23,7 +23,7 @@ class Snake
 
   def update(direction_vector)
 
-      @game.server.update self
+      @game.server.update self if @game.server
 
       delta_angle = direction_vector.angle - @prev_angle
       delta_angle += Math::PI * 2 while delta_angle < Math::PI

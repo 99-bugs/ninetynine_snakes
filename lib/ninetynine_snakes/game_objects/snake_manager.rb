@@ -15,6 +15,7 @@ class SnakeManager
   end
 
   def update
+    if @game.server
       queue = @game.server.queue
       until queue.empty?
           data = queue.pop(true) rescue nil
@@ -31,6 +32,7 @@ class SnakeManager
               end
           end
       end
+    end
   end
 
   def add_snake(snake)

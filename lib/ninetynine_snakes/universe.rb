@@ -1,6 +1,6 @@
 class Universe
 
-  attr_accessor :food, :snakes
+  attr_accessor :food, :snakes, :game
 
   def initialize(window)
     @game = window
