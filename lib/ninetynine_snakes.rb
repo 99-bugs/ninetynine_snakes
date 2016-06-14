@@ -17,10 +17,11 @@ require 'ninetynine_snakes/game_objects/cursor'
 require 'ninetynine_snakes/game_objects/background'
 require 'ninetynine_snakes/game_objects/food_manager'
 require 'ninetynine_snakes/game_objects/snake_manager'
+require 'ninetynine_snakes/input/input_manager'
 
 module NinetynineSnakes
   class GameWindow < Gosu::Window
-    attr_reader :soundmanager, :texturemanager, :center, :universe, :server
+    attr_reader :soundmanager, :texturemanager, :center, :universe, :server, :input_manager
 
     def initialize width=800,height=450
       
@@ -30,6 +31,7 @@ module NinetynineSnakes
 
       @soundmanager = SoundManager.new
       @texturemanager = TextureManager.new(self)
+      @input_manager = InputManager.new
 
       # Create the game universe
       @universe = Universe.new(self)
@@ -50,6 +52,7 @@ module NinetynineSnakes
 
       # Game state
       @game_state = :main_menu
+      @input_manager.on_key_down(Gosu::KbEscape) { |event| close }
 
       @configuration = Configuration.new
 
@@ -137,9 +140,11 @@ module NinetynineSnakes
     end
 
     def button_down id
-      if @game_state == :main_menu
-        close if id == Gosu::KbEscape
-      end
+      @input_manager.button_down id
+    end
+
+    def button_up id
+      @input_manager.button_up id
     end
 
     def draw

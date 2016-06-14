@@ -23,6 +23,10 @@ describe GameWindow, "Gosu Game Window" do
     it "should have a caption" do
       @game.caption.must_equal "99-Snakes"
     end
+
+    it "should have an input manager" do
+      @game.must_respond_to :input_manager
+    end
   end
 
   describe "main menu" do
