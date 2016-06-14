@@ -25,4 +25,27 @@ describe GameWindow, "Gosu Game Window" do
     end
   end
 
+  describe "main menu" do
+
+    it "should close when escape is hit" do
+      # 1) Create mock
+      game_mock = Minitest::Mock.new
+      game_mock.expect :close, nil, []
+
+      # 2) Place mock
+      @game.instance_exec(game_mock) do |mock|
+        @mock = mock
+        def close
+          @mock.close
+        end
+      end
+
+      # 3) Verify mock was called
+      escape_key = Gosu::KbEscape
+      @game.button_down(escape_key)
+      game_mock.verify
+    end
+
+  end
+
 end

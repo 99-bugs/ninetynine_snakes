@@ -136,6 +136,12 @@ module NinetynineSnakes
       end
     end
 
+    def button_down id
+      if @game_state == :main_menu
+        close if id == Gosu::KbEscape
+      end
+    end
+
     def draw
       # Should really only render the current state of things and not change anything,
       # not even advance animations.
