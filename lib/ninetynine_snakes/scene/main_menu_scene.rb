@@ -7,7 +7,7 @@ class MainMenuScene < Scene
 
     @menu = Menu.new(@game_window)
     @menu.add('Start Singleplayer Game', lambda { @game_window.start_single_player })
-    @menu.add('Start Multiplayer Game', lambda { puts "clicked multiplayer" })
+    @menu.add('Start Multiplayer Game', lambda { @game_window.show_multiplayer_connect })
     @menu.add('Options', lambda { puts "Showing Options"})
     @menu.add('Credits', lambda { puts "Showing Credits"})
     @menu.add('Exit Game', lambda { @game_window.close })

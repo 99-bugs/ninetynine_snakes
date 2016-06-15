@@ -50,7 +50,6 @@ class Configuration
     @snake_body_texture = 'snake/body/default.png'
   end
 
-  private
   def to_hash
     config = Hash.new
 
@@ -74,6 +73,7 @@ class Configuration
     return config
   end
 
+  private
   def to_yaml
     # Remove all unneeded info such as label and type
     config = to_hash.clone

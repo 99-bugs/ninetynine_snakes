@@ -10,6 +10,7 @@ require 'ninetynine_snakes/assets/texture_manager'
 require 'ninetynine_snakes/menu/menu'
 require 'ninetynine_snakes/menu/menu_item'
 require 'ninetynine_snakes/menu/textfield'
+require 'ninetynine_snakes/menu/ip_address'
 require 'ninetynine_snakes/menu/input_screen'
 require 'ninetynine_snakes/menu/options_screen_factory'
 require 'ninetynine_snakes/game_objects/game_object'
@@ -26,6 +27,8 @@ require 'ninetynine_snakes/scene/scene'
 require 'ninetynine_snakes/scene/game_scene'
 require 'ninetynine_snakes/scene/scoreboard_scene'
 require 'ninetynine_snakes/scene/main_menu_scene'
+require 'ninetynine_snakes/scene/input_scene'
+require 'ninetynine_snakes/scene/multiplayer_connect_scene'
 require 'ninetynine_snakes/configuration/configuration'
 require 'ninetynine_snakes/snake'
 require 'ninetynine_snakes/universe'
@@ -66,28 +69,7 @@ module NinetynineSnakes
 
       @center = Point.new(width/2, height/2)
 
-      @scene = MainMenuScene.new @universe, @camera, @input_manager
-
-      # Build multiplayer screen
-      # build_multiplayer_info_screen
-    end
-
-    def build_multiplayer_info_screen
-      @multiplayer_info_screen = OptionsScreenFactory.build_multiplayer_start_screen(self,
-        @text_object, @configuration, method(:multiplayer_info_callback))
-    end
-
-    def multiplayer_info_callback
-      if (@multiplayer_info_screen.all_validates?)
-        @configuration.server_ip = @multiplayer_info_screen.get_input('server_ip').text
-        @configuration.nickname = @multiplayer_info_screen.get_input('nickname').text
-
-        # Change gamestate
-        @gamestate = :playing
-        @server = Client.new self, @configuration.nickname
-      else
-        @multiplayer_info_screen.validate_all!
-      end
+      show_main_menu
     end
 
     def update
@@ -109,11 +91,24 @@ module NinetynineSnakes
       @scene.draw
     end
 
+    def show_main_menu
+      @scene = MainMenuScene.new @universe, @camera, @input_manager
+    end
+
     def game_over!
       @scene = ScoreboardScene.new @universe, @camera, @input_manager
     end
 
     def start_single_player
+      @scene = GameScene.new @universe, @camera, @input_manager
+    end
+
+    def show_multiplayer_connect
+      @scene = MultiplayerConnectScene.new @universe, @camera, @input_manager
+    end
+
+    def start_multiplayer nickname, server_ip
+      @server = Client.new self, nickname, server_ip
       @scene = GameScene.new @universe, @camera, @input_manager
     end
   end

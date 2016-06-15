@@ -11,18 +11,4 @@ class OptionsScreenFactory
 
     return screen
   end
-
-  # sub_key is key for options in config hash
-  def self.build_multiplayer_start_screen(window, font, configuration, callback)
-    config_options = configuration.to_hash
-    ip_address = config_options['multiplayer']['server_ip']
-    nickname = config_options['player']['nickname']
-
-    screen = InputScreen.new(window, callback)
-    screen.add_input(font, ip_address['label'], 'server_ip', ip_address['type'], ip_address['value'])
-    screen.add_input(font, nickname['label'], 'nickname', nickname['type'], nickname['value'])
-
-    return screen
-  end
-
 end
