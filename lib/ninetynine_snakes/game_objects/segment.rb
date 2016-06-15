@@ -1,5 +1,3 @@
-require 'ninetynine_snakes/game_objects/game_object'
-
 class Segment < GameObject
 
   def initialize(window, location, width=nil, height=nil, color=Gosu::Color::GREEN)

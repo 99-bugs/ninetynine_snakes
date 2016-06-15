@@ -1,5 +1,3 @@
-require 'ninetynine_snakes/2d/vector'
-
 class YouDied < Exception; end
 
 class Snake

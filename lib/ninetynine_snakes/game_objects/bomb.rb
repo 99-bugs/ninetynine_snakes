@@ -1,5 +1,3 @@
-require 'ninetynine_snakes/game_objects/dot'
-
 class Bomb < Dot
 
   def initialize(window, location, width=nil, height=nil, sprite_params=nil, grow_factor=-30, color=Gosu::Color::RED)

@@ -1,5 +1,3 @@
-require 'ninetynine_snakes/game_objects/game_object'
-
 class Cursor < GameObject
   SPRITE_SIZE_FACTOR = 0.2
   SPRITE_SIZE = 211

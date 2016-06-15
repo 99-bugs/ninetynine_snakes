@@ -1,5 +1,3 @@
-require 'ninetynine_snakes/game_objects/game_object'
-
 class Dot < GameObject
   MOTION_MAX_SPEED = 0.025
   MOTION_MAX_RADIUS = 10

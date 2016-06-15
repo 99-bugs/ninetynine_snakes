@@ -1,5 +1,3 @@
-require 'ninetynine_snakes/2d/point'
-
 class GameObject
   attr_accessor :location, :width, :height
 

@@ -1,5 +1,3 @@
-require 'ninetynine_snakes/ip_address'
-
 class InputScreen
 
   def initialize(window, callback=nil)

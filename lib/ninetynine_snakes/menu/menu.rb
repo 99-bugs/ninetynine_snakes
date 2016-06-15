@@ -1,5 +1,3 @@
-require 'ninetynine_snakes/menu/menu_item'
-
 class Menu
   FONT_SIZE = 48
   FONT_NAME = 'Ubuntu Sans'

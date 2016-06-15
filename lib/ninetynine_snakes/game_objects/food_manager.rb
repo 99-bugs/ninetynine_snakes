@@ -1,6 +1,3 @@
-require 'ninetynine_snakes/game_objects/dot'
-require 'ninetynine_snakes/game_objects/bomb'
-
 class FoodManager
 
   def initialize game
