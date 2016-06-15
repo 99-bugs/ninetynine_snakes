@@ -5,6 +5,7 @@ require 'ninetynine_snakes/2d/point'
 require 'ninetynine_snakes/2d/vector'
 require 'ninetynine_snakes/sprite/sprite'
 require 'ninetynine_snakes/assets/sound_manager'
+require 'ninetynine_snakes/assets/sprite_manager'
 require 'ninetynine_snakes/assets/texture_manager'
 require 'ninetynine_snakes/menu/menu'
 require 'ninetynine_snakes/menu/menu_item'
@@ -35,6 +36,7 @@ module NinetynineSnakes
   class GameWindow < Gosu::Window
     attr_reader :soundmanager,
                 :texturemanager,
+                :spritemanager,
                 :center,
                 :universe,
                 :server,
@@ -51,6 +53,7 @@ module NinetynineSnakes
 
       @soundmanager = SoundManager.new
       @texturemanager = TextureManager.new(self)
+      @spritemanager = SpriteManager.new(self)
       @input_manager = InputManager.new
 
       # Create the game universe

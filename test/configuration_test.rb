@@ -19,8 +19,8 @@ describe Configuration, "Player configuration" do
       @configuration.server_ip.must_equal "127.0.0.1"
       @configuration.server_port.must_equal 9956
       @configuration.nickname.must_contain "Player_"
-      @configuration.snake_head_texture.must_equal "snake.png"
-      @configuration.snake_body_texture.must_equal "snake.png"
+      @configuration.snake_head_texture.must_equal "snake/head/default.png"
+      @configuration.snake_body_texture.must_equal "snake/body/default.png"
     end
 
   end

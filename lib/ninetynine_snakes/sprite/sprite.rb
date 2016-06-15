@@ -1,12 +1,12 @@
 class Sprite
 
-  attr_reader :file,
+  attr_reader :relative_path,
               :size_factor,
               :width,
               :height
 
-  def initialize (file, size_factor, width, height)
-    @file = file
+  def initialize (relative_path, size_factor, width, height)
+    @relative_path = relative_path
     @size_factor = size_factor
     @width = width
     @height = height

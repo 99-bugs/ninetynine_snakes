@@ -46,8 +46,8 @@ class Configuration
     @show_fps = false
     @server_ip = "127.0.0.1"
     @server_port = 9956
-    @snake_head_texture = 'snake.png'
-    @snake_body_texture = 'snake.png'
+    @snake_head_texture = 'snake/head/default.png'
+    @snake_body_texture = 'snake/body/default.png'
   end
 
   private

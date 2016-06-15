@@ -14,23 +14,11 @@ class TextureManager
     end
   end
 
-  def load_texture(sprite, key)
-    @assets[key] = Gosu::Image::load_tiles(TEXTURE_DIR + sprite.file, sprite.width, sprite.height)
-  end
-
   def get_image(key)
     if (@assets.has_key?(key))
       return @assets[key]
     else
       raise "Image not found - " + file
-    end
-  end
-
-  def get_sprites(key)
-    if (@assets.has_key?(key))
-      return @assets[key]
-    else
-      raise "Sprites not found - " + file
     end
   end
 end

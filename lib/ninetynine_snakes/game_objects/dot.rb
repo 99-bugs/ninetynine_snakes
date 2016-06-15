@@ -7,7 +7,7 @@ class Dot < GameObject
   attr_reader :grow_factor
 
   def initialize(window, location, width=nil, height=nil, sprite=nil, asset_key='dot', grow_factor=10)
-    sprite = Sprite.new('snake.png', 0.1, 96, 96) unless sprite
+    sprite = Sprite.new('dot.png', 0.1, 96, 96) unless sprite
 
     super(window, location, width, height, sprite, asset_key)
 

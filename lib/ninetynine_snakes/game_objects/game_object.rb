@@ -17,7 +17,7 @@ class GameObject
 
   def draw
     if @sprite
-      @window.texturemanager.get_sprites(@asset_key)[0].draw(
+      @window.spritemanager.get_sprites(@asset_key)[0].draw(
           x - (@width / 2),
           y - (@height / 2),
           1,
@@ -44,6 +44,6 @@ class GameObject
 
   private
   def load_asset
-    @window.texturemanager.load_texture(@sprite, @asset_key) if @asset_key
+    @window.spritemanager.load_sprites(@sprite, @asset_key) if @asset_key
   end
 end
