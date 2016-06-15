@@ -7,7 +7,9 @@ class Configuration
 
 	attr_accessor :server_ip,
                 :server_port,
-                :nickname
+                :nickname,
+                :snake_head_texture,
+                :snake_body_texture
 
 	def initialize
     reset!
@@ -44,6 +46,8 @@ class Configuration
     @show_fps = false
     @server_ip = "127.0.0.1"
     @server_port = 9956
+    @snake_head_texture = 'snake.png'
+    @snake_body_texture = 'snake.png'
   end
 
   private
@@ -52,6 +56,10 @@ class Configuration
 
     config['player'] = Hash.new
     create_option(config['player'], 'nickname', "Enter your NickName:", :text, @nickname)
+
+    config['snake'] = Hash.new
+    create_option(config['snake'], 'head_texture', "Snake head texture:", :text, @snake_head_texture)
+    create_option(config['snake'], 'body_texture', "Snake body texture:", :text, @snake_body_texture)
 
     config['input'] = Hash.new
     create_option(config['input'], 'use_mouse', "Use mouse for steering? ", :bool, @use_mouse)
@@ -79,6 +87,8 @@ class Configuration
 
   def from_yaml(config)
     @nickname = config['player']['nickname']
+    @snake_head_texture = config['snake']['snake_head_texture']
+    @snake_body_texture = config['snake']['snake_body_texture']
     @use_mouse = config['input']['use_mouse']
     @show_fps = config['video']['show_fps']
     @server_ip = config['multiplayer']['server_ip']
