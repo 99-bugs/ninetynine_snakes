@@ -3,6 +3,7 @@ require 'ninetynine_snakes'
 require 'gosu'
 
 require 'minitest/autorun'
+require 'custom_assertions/string_assertions'
 
 include NinetynineSnakes
 
