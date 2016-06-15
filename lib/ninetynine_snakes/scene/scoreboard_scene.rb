@@ -1,19 +1,9 @@
 class ScoreboardScene < Scene
 
   def initialize universe, camera, input_manager
-    super(universe, camera, input_manager)
-
-    @universe = universe
-    @camera = camera
-    @player = @universe.snakes.player
-    @input_manager = input_manager
-    @game_window = @universe.game
+    super
 
     @text_object = Gosu::Font.new(@game_window, 'Ubuntu Sans', 24)
-  end
-
-  def update
-    super
   end
 
   def draw

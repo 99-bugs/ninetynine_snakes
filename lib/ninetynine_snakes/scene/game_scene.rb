@@ -1,12 +1,11 @@
 class GameScene < Scene
   def initialize universe, camera, input_manager
-    super(universe, camera, input_manager)
+    super
 
     # Direction vector is based on center of window (because so are mouse coordinates)
     @current_heading = (Vector.new(Point.new(0,0), @game_window.center)).to_unity
 
     @use_mouse = true
-    register_input_events
   end
 
   def update
