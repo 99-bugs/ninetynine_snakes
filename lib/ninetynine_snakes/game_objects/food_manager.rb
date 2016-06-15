@@ -5,8 +5,8 @@ class FoodManager
 
       @food = []
 
-      generate_random_dots(10)
-      generate_random_bombs(100)
+      generate_random_dots(100)
+      generate_random_bombs(10)
   end
 
   def update
