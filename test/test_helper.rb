@@ -5,3 +5,6 @@ require 'gosu'
 require 'minitest/autorun'
 
 include NinetynineSnakes
+
+require "minitest/reporters"
+Minitest::Reporters.use!    [Minitest::Reporters::SpecReporter.new]
