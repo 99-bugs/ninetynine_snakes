@@ -87,8 +87,8 @@ class Configuration
 
   def from_yaml(config)
     @nickname = config['player']['nickname']
-    @snake_head_texture = config['snake']['snake_head_texture']
-    @snake_body_texture = config['snake']['snake_body_texture']
+    @snake_head_texture = config['snake']['head_texture']
+    @snake_body_texture = config['snake']['body_texture']
     @use_mouse = config['input']['use_mouse']
     @show_fps = config['video']['show_fps']
     @server_ip = config['multiplayer']['server_ip']
