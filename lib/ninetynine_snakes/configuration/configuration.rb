@@ -1,21 +1,48 @@
 require 'yaml'
 
+class ConfigFileMissing < Exception; end
+
 class Configuration
   CONFIG_FILE = 'config.yml'
 
-	attr_accessor :use_mouse, :show_fps, :server_ip, :server_port, :nickname
+	attr_accessor :server_ip,
+                :server_port,
+                :nickname
 
 	def initialize
-    # Default config
     @nickname = "Player_" + rand(0..1000).to_s
     @use_mouse = true
     @show_fps = false
     @server_ip = "127.0.0.1"
     @server_port = 9956
 
-    read
+    begin
+      read_from_config_file
+    rescue ConfigFileMissing
+      write_to_config_file
+    end
 	end
 
+  def read_from_config_file
+    raise ConfigFileMissing.new unless File.exists?(CONFIG_FILE)
+    from_yaml(YAML.load_file(CONFIG_FILE))
+  end
+
+  def write_to_config_file
+    File.open(CONFIG_FILE,'w') do |c| 
+       c.write to_yaml
+    end
+  end
+
+  def use_mouse?
+    @use_mouse
+  end
+
+  def show_fps?
+    @show_fps
+  end
+
+  private
   def to_hash
     config = Hash.new
 
@@ -36,25 +63,14 @@ class Configuration
   end
 
   def to_yaml
-    # We need to remove all unneeded info
-    yamlconfig = to_hash.clone
-    yamlconfig.each do |k, category|
+    # Remove all unneeded info such as label and type
+    config = to_hash.clone
+    config.each do |k, category|
       category.each do |l, option|
-        yamlconfig[k][l] = option['value']
+        config[k][l] = option['value']
       end
     end
-    yamlconfig.to_yaml
-  end
-
-  def from_yaml(yamlconfig)
-    # We need to create similar structure to our config
-    yamlconfig.each do |k, category|
-      category.each do |l, option|
-        yamlconfig[k][l] = Hash.new
-        yamlconfig[k][l]['value'] = option
-      end
-    end
-    yamlconfig
+    config.to_yaml
   end
 
   def from_yaml(config)
@@ -63,19 +79,6 @@ class Configuration
     @show_fps = config['video']['show_fps']
     @server_ip = config['multiplayer']['server_ip']
     @server_port = config['multiplayer']['server_port']
-  end
-
-  def write
-    config = to_yaml
-    File.open(CONFIG_FILE,'w') do |c| 
-       c.write config
-    end
-  end
-
-  def read
-    # We need to create similar structure to our config
-    yamlconfig = YAML.load_file(CONFIG_FILE)
-    from_yaml(yamlconfig)
   end
 
   def create_option(config, key, label, type, default_value)

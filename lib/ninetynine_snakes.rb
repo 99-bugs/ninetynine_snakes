@@ -31,7 +31,13 @@ require 'ninetynine_snakes/client'
 
 module NinetynineSnakes
   class GameWindow < Gosu::Window
-    attr_reader :soundmanager, :texturemanager, :center, :universe, :server, :input_manager
+    attr_reader :soundmanager,
+                :texturemanager,
+                :center,
+                :universe,
+                :server,
+                :input_manager,
+                :configuration
 
     def initialize width=800,height=450
       
@@ -55,7 +61,7 @@ module NinetynineSnakes
 
       @scene = MainMenuScene.new @universe, @camera, @input_manager
 
-      # @configuration = Configuration.new
+      @configuration = Configuration.new
 
       # Build multiplayer screen
       # build_multiplayer_info_screen

@@ -4,8 +4,6 @@ class GameScene < Scene
 
     # Direction vector is based on center of window (because so are mouse coordinates)
     @current_heading = (Vector.new(Point.new(0,0), @game_window.center)).to_unity
-
-    @use_mouse = true
   end
 
   def update
@@ -35,7 +33,7 @@ class GameScene < Scene
 
   def register_input_events
     super
-    unless @use_mouse
+    unless @game_window.configuration.use_mouse
       @input_manager.on_key_down(Gosu::KbLeft) { |event| @current_heading = Vector.new(Point.new(-1, 0), Point.new(0, 0)) }
       @input_manager.on_key_down(Gosu::KbRight) { |event| @current_heading = Vector.new(Point.new(1, 0), Point.new(0, 0)) }
       @input_manager.on_key_down(Gosu::KbUp) { |event| @current_heading = Vector.new(Point.new(0, -1), Point.new(0, 0)) }
@@ -45,7 +43,7 @@ class GameScene < Scene
 
   private
   def update_target_location
-    if (@use_mouse)
+    if @game_window.configuration.use_mouse
       # Determine direction vector from center to current location of mouse
       mouse = Point.new(@game_window.mouse_x, @game_window.mouse_y)
       @current_heading = (Vector.new(mouse, @game_window.center)).to_direction
