@@ -3,6 +3,7 @@ require "ninetynine_snakes/version"
 require 'gosu'
 require 'ninetynine_snakes/2d/point'
 require 'ninetynine_snakes/2d/vector'
+require 'ninetynine_snakes/sprite/sprite'
 require 'ninetynine_snakes/assets/sound_manager'
 require 'ninetynine_snakes/assets/texture_manager'
 require 'ninetynine_snakes/menu/menu'
@@ -14,6 +15,7 @@ require 'ninetynine_snakes/game_objects/game_object'
 require 'ninetynine_snakes/game_objects/dot'
 require 'ninetynine_snakes/game_objects/bomb'
 require 'ninetynine_snakes/game_objects/segment'
+require 'ninetynine_snakes/game_objects/head'
 require 'ninetynine_snakes/game_objects/cursor'
 require 'ninetynine_snakes/game_objects/background'
 require 'ninetynine_snakes/game_objects/food_manager'
@@ -45,6 +47,8 @@ module NinetynineSnakes
       self.caption = "99-Snakes"
       @text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
 
+      @configuration = Configuration.new
+
       @soundmanager = SoundManager.new
       @texturemanager = TextureManager.new(self)
       @input_manager = InputManager.new
@@ -60,8 +64,6 @@ module NinetynineSnakes
       @center = Point.new(width/2, height/2)
 
       @scene = MainMenuScene.new @universe, @camera, @input_manager
-
-      @configuration = Configuration.new
 
       # Build multiplayer screen
       # build_multiplayer_info_screen

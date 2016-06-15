@@ -1,34 +1,21 @@
 class Dot < GameObject
+
   MOTION_MAX_SPEED = 0.025
   MOTION_MAX_RADIUS = 10
 
   attr_accessor :center_location
   attr_reader :grow_factor
 
-  def initialize(window, location, width=nil, height=nil, sprite_params=nil, grow_factor=10, color=Gosu::Color::RED)
+  def initialize(window, location, width=nil, height=nil, sprite=nil, asset_key='dot', grow_factor=10)
+    sprite = Sprite.new('snake.png', 0.1, 96, 96) unless sprite
 
-    sprite_params = default_sprite if sprite_params.nil?
-    width = sprite_params[:width] * sprite_params[:size_factor] if width.nil?
-    height = sprite_params[:height] * sprite_params[:size_factor] if height.nil?
-
-    super(window, location, width, height, color)
-    set_sprite(sprite_params)
+    super(window, location, width, height, sprite, asset_key)
 
     @center_location = location.clone
     generate_motion
     @grow_factor = grow_factor
 
     @window.soundmanager.load_file('eat_dot.wav', 'eat_dot')
-  end
-
-  def default_sprite
-    sprite_params = {
-      file: 'snake.png',
-      key: 'dot',
-      size_factor: 0.1,
-      width: 96,
-      height: 96
-    }
   end
 
   def generate_motion

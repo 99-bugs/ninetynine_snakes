@@ -109,7 +109,11 @@ class Snake
 
   def add_segments count
     count.times do |i|
-      @segments << Segment.new(@game, Point.new(0,0))
+      if number_of_segments == 0
+        @segments << Head.new(@game, Point.new(0,0))
+      else
+        @segments << Segment.new(@game, Point.new(0,0))
+      end
     end
   end
 

@@ -1,44 +1,36 @@
 class GameObject
-  attr_accessor :location, :width, :height
+  attr_accessor :location
+  attr_reader :width,
+              :height
 
-  def initialize(window, location, width, height, color=Gosu::Color::RED)
+  def initialize(window, location, width=nil, height=nil, sprite=nil, asset_key=nil)
     @window = window
     @location = location
-    @color = color
-    @width = width
-    @height = height
-  end
+    @sprite = sprite
+    @asset_key = asset_key
 
-  # sprite_params = {
-  #     file: 'filename.png',
-  #     key: 'dot',
-  #     size_factor: 1.0,
-  #     width: 32,
-  #     height: 48
-  # }
-  def set_sprite(sprite_params={})
-    @sprite_params = sprite_params
-    if (!(@sprite_params.nil? || @sprite_params.empty?))
-      @window.texturemanager.load_texture(@sprite_params[:file], @sprite_params[:key],
-        @sprite_params[:width], @sprite_params[:height])
-    end
+    @width = @sprite.width * @sprite.size_factor unless width
+    @height = @sprite.height * @sprite.size_factor unless height
+
+    load_asset
   end
 
   def draw
-    if (!(@sprite_params.nil? || @sprite_params.empty?))
-      @window.texturemanager.get_sprites(@sprite_params[:key])[0].draw(
+    if @sprite
+      @window.texturemanager.get_sprites(@asset_key)[0].draw(
           x - (@width / 2),
           y - (@height / 2),
           1,
-          @sprite_params[:size_factor],
-          @sprite_params[:size_factor]
+          @sprite.size_factor,
+          @sprite.size_factor
       )
     else
+      color = Gosu::Color::RED
       @window.draw_quad(
-        x, y, @color,
-        x + @width, y, @color,
-        x, y + @height, @color,
-        x + @width, y + @height, @color)
+        x, y, color,
+        x + @width, y, color,
+        x, y + @height, color,
+        x + @width, y + @height, color)
     end
   end
 
@@ -48,5 +40,10 @@ class GameObject
 
   def y
     @location.y
+  end
+
+  private
+  def load_asset
+    @window.texturemanager.load_texture(@sprite, @asset_key) if @asset_key
   end
 end
