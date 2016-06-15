@@ -10,11 +10,7 @@ class Configuration
                 :nickname
 
 	def initialize
-    @nickname = "Player_" + rand(0..1000).to_s
-    @use_mouse = true
-    @show_fps = false
-    @server_ip = "127.0.0.1"
-    @server_port = 9956
+    reset!
 
     begin
       read_from_config_file
@@ -40,6 +36,14 @@ class Configuration
 
   def show_fps?
     @show_fps
+  end
+
+  def reset!
+    @nickname = "Player_" + rand(0..1000).to_s
+    @use_mouse = true
+    @show_fps = false
+    @server_ip = "127.0.0.1"
+    @server_port = 9956
   end
 
   private
