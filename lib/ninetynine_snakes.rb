@@ -108,7 +108,7 @@ module NinetynineSnakes
     end
 
     def start_multiplayer nickname, server_ip
-      @server = Client.new self, nickname, server_ip
+      @server = Client.new self, nickname, server_ip, @configuration.server_port
       @scene = GameScene.new @universe, @camera, @input_manager
     end
   end
