@@ -21,6 +21,7 @@ require 'ninetynine_snakes/input/input_manager'
 require 'ninetynine_snakes/scene/scene'
 require 'ninetynine_snakes/scene/game_scene'
 require 'ninetynine_snakes/scene/scoreboard_scene'
+require 'ninetynine_snakes/scene/main_menu_scene'
 
 module NinetynineSnakes
   class GameWindow < Gosu::Window
@@ -46,27 +47,12 @@ module NinetynineSnakes
 
       @center = Point.new(width/2, height/2)
 
-      @scene = GameScene.new @universe, @camera, @input_manager
-
-      # Create a menu
-      build_menu
-
-      # Game state
-      @game_state = :main_menu
+      @scene = MainMenuScene.new @universe, @camera, @input_manager
 
       # @configuration = Configuration.new
 
       # Build multiplayer screen
       # build_multiplayer_info_screen
-    end
-
-    def build_menu
-      @menu = Menu.new(self)
-      @menu.add('Start Singleplayer Game', lambda { @game_state = :playing })
-      @menu.add('Start Multiplayer Game', lambda { @game_state = :multiplayer_server })
-      @menu.add('Options', lambda { puts "Showing Options"})
-      @menu.add('Credits', lambda { puts "Showing Credits"})
-      @menu.add('Exit Game', lambda { self.close })
     end
 
     def build_multiplayer_info_screen
@@ -108,6 +94,10 @@ module NinetynineSnakes
 
     def game_over!
       @scene = ScoreboardScene.new @universe, @camera, @input_manager
+    end
+
+    def start_single_player
+      @scene = GameScene.new @universe, @camera, @input_manager
     end
   end
 end
