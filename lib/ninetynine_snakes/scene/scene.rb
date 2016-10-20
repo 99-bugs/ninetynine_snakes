@@ -1,10 +1,7 @@
 class Scene
-  def initialize universe, camera, input_manager
-    @universe = universe
-    @camera = camera
-    @player = @universe.snakes.player
+  def initialize input_manager, game_window
     @input_manager = input_manager
-    @game_window = @universe.game
+    @game_window = game_window
     @cursor = Cursor.new(@game_window)
 
     register_input_events

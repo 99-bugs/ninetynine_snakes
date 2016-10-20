@@ -47,7 +47,7 @@ module NinetynineSnakes
                 :configuration
 
     def initialize width=800,height=450
-      
+
       super width, height, false
       self.caption = "99-Snakes"
       @text_object = Gosu::Font.new(self, 'Ubuntu Sans', 24)
@@ -58,14 +58,6 @@ module NinetynineSnakes
       @texturemanager = TextureManager.new(self)
       @spritemanager = SpriteManager.new(self)
       @input_manager = InputManager.new
-
-      # Create the game universe
-      @universe = Universe.new(self)
-      @player = @universe.snakes.player
-
-      # Create camera
-      @camera = Camera.new(width, height)
-      @camera.update(@player.location)
 
       @center = Point.new(width/2, height/2)
 
@@ -92,24 +84,36 @@ module NinetynineSnakes
     end
 
     def show_main_menu
-      @scene = MainMenuScene.new @universe, @camera, @input_manager
+      @scene = MainMenuScene.new @input_manager, self
     end
 
     def game_over!
-      @scene = ScoreboardScene.new @universe, @camera, @input_manager
-    end
-
-    def start_single_player
-      @scene = GameScene.new @universe, @camera, @input_manager
+      @scene = ScoreboardScene.new @input_manager, self, @player
     end
 
     def show_multiplayer_connect
-      @scene = MultiplayerConnectScene.new @universe, @camera, @input_manager
+      @scene = MultiplayerConnectScene.new @input_manager, self
+    end
+
+    def setup_universe
+      # Create the game universe
+      @universe = Universe.new(self)
+      @player = @universe.snakes.player
+
+      # Create camera
+      @camera = Camera.new(width, height)
+      @camera.update(@player.location)
+    end
+
+    def start_single_player
+      setup_universe
+      @scene = GameScene.new @input_manager, self, @universe, @camera
     end
 
     def start_multiplayer nickname, server_ip
       @server = Client.new self, nickname, server_ip, @configuration.server_port
-      @scene = GameScene.new @universe, @camera, @input_manager
+      setup_universe
+      @scene = GameScene.new @input_manager, self, @universe, @camera
     end
   end
 end

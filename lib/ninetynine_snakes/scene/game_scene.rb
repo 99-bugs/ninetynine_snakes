@@ -1,6 +1,10 @@
 class GameScene < Scene
-  def initialize universe, camera, input_manager
-    super
+  def initialize input_manager, game_window, universe, camera
+    super(input_manager, game_window)
+
+    @universe = universe
+    @camera = camera
+    @player = @universe.snakes.player
 
     # Direction vector is based on center of window (because so are mouse coordinates)
     @current_heading = (Vector.new(Point.new(0,0), @game_window.center)).to_unity
@@ -17,7 +21,7 @@ class GameScene < Scene
     rescue YouDied => die
       @game_window.game_over!
     end
-    
+
     @universe.update
 
     @camera.update(@player.location)

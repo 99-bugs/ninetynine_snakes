@@ -1,6 +1,6 @@
 class MainMenuScene < Scene
 
-  def initialize universe, camera, input_manager
+  def initialize input_manager, game_window
     super
 
     @text_object = Gosu::Font.new(@game_window, 'Ubuntu Sans', 24)

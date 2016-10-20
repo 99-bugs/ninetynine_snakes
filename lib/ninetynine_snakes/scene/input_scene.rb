@@ -1,7 +1,7 @@
 class InputScene < Scene
 
-  def initialize universe, camera, input_manager, callback=nil
-    super(universe, camera, input_manager)
+  def initialize input_manager, game_window, callback=nil
+    super(input_manager, game_window)
 
     # Use array to keep ordering
     @input_fields = []

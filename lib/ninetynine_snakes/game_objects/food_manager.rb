@@ -5,8 +5,10 @@ class FoodManager
 
       @food = []
 
-      generate_random_dots(100)
-      generate_random_bombs(10)
+      unless @game.server
+        generate_random_dots(100)
+        generate_random_bombs(10)
+      end
   end
 
   def update
